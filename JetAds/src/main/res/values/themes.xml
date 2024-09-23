@@ -1,0 +1,11 @@
+<resources>
+
+    <style name="gnt_small_background">
+        <item name="android:background">@color/gnt_green</item>
+    </style>
+
+    <style name="native_ad_cta_bt">
+        <item name="android:background">@color/gnt_small_cta_bt_background_color</item>
+        <item name="android:textColor">@color/gnt_small_cta_bt_text_color</item>
+    </style>
+</resources>

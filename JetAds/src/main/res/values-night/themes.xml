@@ -1,0 +1,11 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="gnt_small_background">
+        <item name="android:background">@color/gnt_small_background_color_night</item>
+    </style>
+
+
+    <style name="native_ad_cta_bt" >
+        <item name="android:background">@color/gnt_small_cta_bt_background_color_night</item>
+        <item name="android:textColor">@color/gnt_small_cta_bt_text_color_night</item>
+    </style>
+</resources>

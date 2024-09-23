@@ -1,0 +1,12 @@
+Para poder usar a lib de ads o modulo "core" do app tem que implementar:
+
+    implementation 'com.google.android.gms:play-services-ads:20.6.0'
+
+
+
+Lembre de adicionar a tah <meta-data> dentro de aplication no manifest: (este já é o aplication_id para teste)
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
+

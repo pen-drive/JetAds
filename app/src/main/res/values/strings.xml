@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">JetAds</string>
+    <string name="title_activity_main_comp">JetAds</string>
+
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="muito_obrigado_por_usar_esta_lib">JetAds</string>
+    <string name="considere_contribuir_confira_o_readme_para_saber_como_voc_pode_ajudar">Considere contribuir finaceiramente! Confira o README para saber como você pode ajudar.</string>
+    <string name="ligar_desligar_ads">Ligar/Desligar ads</string>
+    <string name="mostrar_interstitial">Mostrar interstitial</string>
+    <string name="mostrar_rewarded">Mostrar Rewarded</string>
+    <string name="test_open_ad_instructions">Para Testar open Ads mova este app para o background e depois volte para foreground</string>
+    <string name="contribui_es_e_sugest_es_s_o_muito_bem_vidas_github">Contribuições e sugestões são muito bem vidas! GitHub</string>
+    <string name="show_interstitial">Show interstitial</string>
+    <string name="show_rewarded">Show rewarded</string>
+</resources>
