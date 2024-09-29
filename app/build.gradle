@@ -48,6 +48,7 @@ android {
 
 dependencies {
 
+    implementation 'androidx.compose.material:material-icons-core:1.2.1'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
 
     implementation "androidx.lifecycle:lifecycle-runtime-compose:2.8.4"

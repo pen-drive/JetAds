@@ -71,56 +71,43 @@ android {
 
 
 dependencies {
-    implementation platform('androidx.compose:compose-bom:2024.08.00')
 
     implementation "androidx.lifecycle:lifecycle-runtime-compose:2.8.4"
-
     implementation 'com.google.errorprone:error_prone_annotations:2.28.0'
-
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.core:core-ktx:1.13.1'
-
 
     api 'com.google.android.gms:play-services-ads:23.3.0'
     implementation 'androidx.lifecycle:lifecycle-process:2.8.5'
     implementation 'androidx.lifecycle:lifecycle-runtime-testing:2.8.6'
 
-
-    debugImplementation "androidx.compose.ui:ui-test-manifest"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:1.7.2"
 
     implementation 'androidx.core:core-ktx:1.13.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.4'
-    implementation "androidx.compose.ui:ui"
-    implementation "androidx.compose.ui:ui-tooling-preview"
+    implementation "androidx.compose.ui:ui:1.7.2"
+    implementation "androidx.compose.ui:ui-tooling-preview:1.7.2"
 
-
-    implementation  'androidx.activity:activity-compose:1.9.1'
-    implementation 'androidx.compose.material:material'
-    implementation 'androidx.compose.animation:animation'
-    implementation 'androidx.compose.ui:ui-tooling'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose'
-
-
+    implementation 'androidx.activity:activity-compose:1.9.1'
+    implementation 'androidx.compose.material:material:1.7.2'
+    implementation 'androidx.compose.animation:animation:1.7.2'
+    implementation 'androidx.compose.ui:ui-tooling:1.7.2'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.8.4'
 
     testImplementation "androidx.compose.ui:ui-test-junit4:1.7.2"
     testImplementation "org.robolectric:robolectric:4.11.1"
     debugImplementation "androidx.compose.ui:ui-test-manifest:1.7.2"
 
-    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.7.2'
     androidTestImplementation("io.mockk:mockk-android:1.13.12")
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
 
-
     testImplementation 'junit:junit:4.13.2'
 
-
-    //google truth
     testImplementation "com.google.truth:truth:1.4.4"
     androidTestImplementation "com.google.truth:truth:1.4.4"
-
 
     testImplementation 'org.robolectric:robolectric:4.11.1'
     testImplementation "io.mockk:mockk:1.13.12"
@@ -128,46 +115,21 @@ dependencies {
     testImplementation("androidx.arch.core:core-testing:2.2.0")
     testImplementation("app.cash.turbine:turbine:1.1.0")
 
-
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'androidx.test.ext:junit:1.2.1'
     testImplementation 'androidx.test:rules:1.6.1'
-
 }
 
-
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components["release"]
-
-                groupId = 'io.github.pen-drive'
-                artifactId = 'jet-ads'
-                version = '1.0.0'
-            }
-        }
-    }
-}
-
+import com.vanniktech.maven.publish.SonatypeHost
+import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
 
 
 mavenPublishing {
-    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL)
+    configure(new AndroidSingleVariantLibrary("release", true, true))
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
     signAllPublications()
 }
 
 
-tasks.named("publishToMavenCentral").configure {
-    dependsOn(tasks.named("signReleasePublication"))
-}
 
-tasks.named("publishToMavenCentral").configure {
-    dependsOn tasks.named("signReleasePublication")
-}
-
-
-tasks.withType(PublishToMavenRepository).configureEach {
-    dependsOn(tasks.withType(Sign))
-}
 
