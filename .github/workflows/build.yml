@@ -3,6 +3,8 @@ name: Publish Library
 on:
   release:
     types: [created]
+    workflow_dispatch:
+
 
 jobs:
   publish:
