@@ -25,7 +25,7 @@ import org.junit.Test
 import kotlin.time.Duration.Companion.seconds
 
 
-@OptIn(ExperimentalCoroutinesApi::class)
+
 class OpenAdAdmobSetupTest {
 
     private lateinit var openAdAdmobSetup: OpenAdAdmobSetup

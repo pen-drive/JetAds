@@ -7,6 +7,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.LoadAdError
 import com.jet.ads.common.app_open.OpenAdSetup
 import com.jet.ads.common.callbacks.OpenAppShowAdCallbacks
 import com.jet.ads.common.callbacks.ShowAdCallBack
@@ -29,8 +30,7 @@ internal class OpenAdAdmobSetup(
     private var activityRef: WeakReference<ComponentActivity>? = null
     private var adsControlImpl: AdsControl? = null
     private var callbacks: OpenAppShowAdCallbacks? = null
-
-
+    private var closeSplashScreenRef: WeakReference<(() -> Unit)>? = null
 
     override fun registerOpenAppAd(
         adUnitId: String,
@@ -40,31 +40,39 @@ internal class OpenAdAdmobSetup(
         closeSplashScreen: () -> Unit
     ) {
         val controller = controlLocator.getAdsControl()
-        if (!controller.areAdsEnabled().value) return
 
+        if (!controller.areAdsEnabled().value) {
+            closeSplashScreen()
+            return
+        }
 
         this.adUnitId = adUnitId
         this.adsControlImpl = controller
         this.activityRef = WeakReference(activity)
-        this.callbacks = createCallbacks(showAdsCallbacks, closeSplashScreen)
-
+        this.closeSplashScreenRef = WeakReference(closeSplashScreen)
+        this.callbacks = createCallbacks(showAdsCallbacks)
 
         appLifecycleManager.setShowOnColdStart(showOnColdStart)
         appLifecycleManager.registerCallback(this)
 
         if (!appLifecycleManager.isFirstEntry()) {
-            closeSplashScreen()
+            safeCloseSplashScreen()
         }
 
 
         registerActivityForOpenAdSetup(onFailedToLoad = {
-            closeSplashScreen()
+            safeCloseSplashScreen()
         }) {
             appLifecycleManager.notifyAdShown()
         }
 
     }
 
+
+    private fun safeCloseSplashScreen() {
+        closeSplashScreenRef?.get()?.invoke()
+        closeSplashScreenRef = null
+    }
 
     override fun onAppStart() {
         if (adsControlImpl?.areAdsEnabled()?.value != true) return
@@ -73,15 +81,15 @@ internal class OpenAdAdmobSetup(
     }
 
     private fun registerActivityForOpenAdSetup(
-        onFailedToLoad: () -> Unit = {},
-        onAddLoad: () -> Unit
+        onFailedToLoad: (error: LoadAdError) -> Unit = {}, onAddLoad: () -> Unit
     ) {
         val activity = activityRef?.get() ?: return
 
         appOpenAdManager?.loadAd(
             adUnitId ?: return,
             activity,
-            onFailedToLoad = { onFailedToLoad() }) {
+            onFailedToLoad,
+        ) {
             onAddLoad()
         }
 
@@ -97,8 +105,7 @@ internal class OpenAdAdmobSetup(
     }
 
     private fun createCallbacks(
-        showAdsCallbacks: ShowAdCallBack?,
-        closeSplashScreen: () -> Unit
+        showAdsCallbacks: ShowAdCallBack?
     ): OpenAppShowAdCallbacks {
         return object : OpenAppShowAdCallbacks {
             override fun onAdClicked() {
@@ -106,7 +113,7 @@ internal class OpenAdAdmobSetup(
             }
 
             override fun onAdDismissed() {
-                closeSplashScreen()
+                safeCloseSplashScreen()
                 showAdsCallbacks?.onAdDismissed?.invoke()
             }
 
