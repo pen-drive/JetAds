@@ -2,9 +2,7 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
-
-    id("com.vanniktech.maven.publish") version "0.28.0" apply false
-    id("com.gradleup.nmcp") version "0.0.7" apply false
+    id 'com.vanniktech.maven.publish'
 }
 
 android {
@@ -136,3 +134,40 @@ dependencies {
     testImplementation 'androidx.test:rules:1.6.1'
 
 }
+
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components["release"]
+
+                groupId = 'io.github.pen-drive'
+                artifactId = 'jet-ads'
+                version = '1.0.0'
+            }
+        }
+    }
+}
+
+
+
+mavenPublishing {
+    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
+}
+
+
+tasks.named("publishToMavenCentral").configure {
+    dependsOn(tasks.named("signReleasePublication"))
+}
+
+tasks.named("publishToMavenCentral").configure {
+    dependsOn tasks.named("signReleasePublication")
+}
+
+
+tasks.withType(PublishToMavenRepository).configureEach {
+    dependsOn(tasks.withType(Sign))
+}
+

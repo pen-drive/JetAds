@@ -9,6 +9,7 @@ buildscript {
     }
     repositories {
         mavenCentral()
+        gradlePluginPortal()
     }
 }
 
@@ -16,15 +17,11 @@ plugins {
     id 'com.android.application' version '8.5.1' apply false
     id 'com.android.library' version '8.5.1' apply false
     id 'org.jetbrains.kotlin.android' version '1.8.10' apply false
-
-    id("com.vanniktech.maven.publish") version "0.28.0" apply false
-    id("com.gradleup.nmcp") version "0.0.7" apply false
+    id 'com.vanniktech.maven.publish' version '0.29.0' apply false
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-allprojects {
-    apply plugin: "maven-publish"
-}
+
