@@ -1,13 +1,16 @@
 package com.jet.ads.admob.open_ad
 
 import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 
 /**
  *  THIS MUST BE A SINGLETON OBJECT!!!!
  * */
-class AppLifecycleManager : DefaultLifecycleObserver {
+class AppLifecycleManager(
+    private val lifecycle: Lifecycle = ProcessLifecycleOwner.get().lifecycle
+) : DefaultLifecycleObserver {
 
     private val callbacks: MutableList<AppLifecycleCallback> = mutableListOf()
     private var hasFirstEntry = false
@@ -15,7 +18,7 @@ class AppLifecycleManager : DefaultLifecycleObserver {
     private var entries = 0
 
     init {
-        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+        lifecycle.addObserver(this)
     }
 
     fun setShowOnColdStart(showOnFirstEntry: Boolean) {
@@ -44,9 +47,8 @@ class AppLifecycleManager : DefaultLifecycleObserver {
 
     override fun onStart(owner: LifecycleOwner) {
         super.onStart(owner)
-        if (hasFirstEntry) {
-            callbacks.forEach { it.onAppStart() }
-        }
+
+        callbacks.forEach { it.onAppStart() }
     }
 
 }

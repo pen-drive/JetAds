@@ -46,6 +46,12 @@ internal class OpenAdAdmobSetup(
             return
         }
 
+
+        if (!showOnColdStart) {
+            closeSplashScreen()
+        }
+
+
         this.adUnitId = adUnitId
         this.adsControlImpl = controller
         this.activityRef = WeakReference(activity)
@@ -53,6 +59,9 @@ internal class OpenAdAdmobSetup(
         this.callbacks = createCallbacks(showAdsCallbacks)
 
         appLifecycleManager.setShowOnColdStart(showOnColdStart)
+
+
+
         appLifecycleManager.registerCallback(this)
 
         if (!appLifecycleManager.isFirstEntry()) {
@@ -65,6 +74,8 @@ internal class OpenAdAdmobSetup(
         }) {
             appLifecycleManager.notifyAdShown()
         }
+
+
 
     }
 

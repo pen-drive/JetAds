@@ -30,10 +30,9 @@ class MainActivity : AppCompatActivity(),
 
         splash.setKeepOnScreenCondition { keepSplashScreen }
 
-        registerOpenAppAd(AdMobTestIds.APP_OPEN, this, showOnColdStart = true) {
+        registerOpenAppAd(AdMobTestIds.APP_OPEN, this, showOnColdStart = false) {
             keepSplashScreen = false
         }
-
 
         setContent {
             val viewModel: MainViewModel = viewModel()

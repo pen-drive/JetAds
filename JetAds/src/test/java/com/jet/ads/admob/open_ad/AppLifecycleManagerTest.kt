@@ -23,7 +23,7 @@ class AppLifecycleManagerTest {
         mockLifecycle = mockk(relaxed = true)
         every { ProcessLifecycleOwner.get().lifecycle } returns mockLifecycle
 
-        appLifecycleManager = AppLifecycleManager()
+        appLifecycleManager = AppLifecycleManager(mockLifecycle)
 
         mockCallback1 = mockk(relaxed = true)
         mockCallback2 = mockk(relaxed = true)
@@ -99,13 +99,5 @@ class AppLifecycleManagerTest {
         verify(exactly = 1) { mockCallback1.onAppStart() }
     }
 
-    @Test
-    fun `test onStart when hasFirstEntry is false`() {
-        appLifecycleManager.registerCallback(mockCallback1)
-        appLifecycleManager.setShowOnColdStart(false)
 
-        appLifecycleManager.onStart(mockLifecycleOwner)
-
-        verify(exactly = 0) { mockCallback1.onAppStart() }
-    }
 }
