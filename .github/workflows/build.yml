@@ -18,7 +18,7 @@ jobs:
 
       - name: Decode GPG Key
         run: |
-          echo ${{ secrets.GPG_SECRET_KEY_RING_FILE_BASE64 }} | base64 -d > secring.gpg
+          echo "${{ secrets.GPG_SECRET_KEY_RING_FILE_BASE64 }}" | base64 -d > secring.gpg
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
