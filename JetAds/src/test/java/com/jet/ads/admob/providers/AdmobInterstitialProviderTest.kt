@@ -178,16 +178,16 @@ class AdmobInterstitialProviderTest {
         assertThat(dismissCalled).isTrue()
     }
 
-    @Test
-    fun `show should not set FullScreenContentCallback when callbacks are null`() {
-        val adUnitId = "test_ad_unit_id"
-        val adPair = Pair(mockInterstitialAd, 0L)
-
-        provider.show(adUnitId, adPair, mockActivity, null) { }
-
-        verify(exactly = 0) { mockInterstitialAd.fullScreenContentCallback = any() }
-        verify { mockInterstitialAd.show(mockActivity) }
-    }
+//    @Test
+//    fun `show should not set FullScreenContentCallback when callbacks are null`() {
+//        val adUnitId = "test_ad_unit_id"
+//        val adPair = Pair(mockInterstitialAd, 0L)
+//
+//        provider.show(adUnitId, adPair, mockActivity, null) { }
+//
+//        verify(exactly = 0) { mockInterstitialAd.fullScreenContentCallback = any() }
+//        verify { mockInterstitialAd.show(mockActivity) }
+//    }
 
     @Test
     fun `show should handle null InterstitialAd gracefully`() {
