@@ -2,6 +2,7 @@ package com.jet.ads.utils.manager
 
 import android.app.Activity
 import android.content.Context
+import com.google.android.gms.ads.LoadAdError
 import com.jet.ads.utils.AdNotAvailableException
 import com.jet.ads.utils.AdProvider
 import com.jet.ads.common.controller.ControlProvider
@@ -27,7 +28,12 @@ internal abstract class BaseAdManager<TAd, TCallbacks>(
      * When adding mediation support, an alternative should be found to use the activity context
      * in a way that does not cause memory leaks.
      */
-    fun loadAd(adUnitId: String, context: Context, onAdLoaded: () -> Unit = {}) {
+    fun loadAd(
+        adUnitId: String,
+        context: Context,
+        onFailedToLoad: (error: LoadAdError) -> Unit = {},
+        onAdLoaded: () -> Unit = {}
+    ) {
         if (!controlProvider.getAdsControl().areAdsEnabled().value) return
 
         val appContext = context.applicationContext
@@ -36,8 +42,9 @@ internal abstract class BaseAdManager<TAd, TCallbacks>(
             adPool.saveAd(adUnitId, ad)
             onAdLoaded()
         }, { error ->
+            onFailedToLoad(error)
             retryPolicy.retry {
-                loadAd(adUnitId, appContext, onAdLoaded)
+                loadAd(adUnitId, appContext, onAdLoaded = onAdLoaded)
             }
         })
     }
