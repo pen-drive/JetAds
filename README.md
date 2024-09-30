@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity(),
 }
 ```
 
-### Banner <img src="docs/images/banner.svg" alt="Banner Ad" width="24" height="24" style="vertical-align: middle;"/>
+### <img src="docs/images/banner.svg" alt="Banner Ad" width="32" height="32" style="vertical-align: middle; margin-right: 10px;"/> Banner
 
 Para adicionar um banner adaptativo:
 
@@ -73,7 +73,7 @@ Scaffold(
 }
 ```
 
-### Interstitials <img src="docs/images/interstitial.svg" alt="Interstitial Ad" width="24" height="24" style="vertical-align: middle;"/>
+### <img src="docs/images/interstitial.svg" alt="Interstitial Ad" width="32" height="32" style="vertical-align: middle; margin-right: 10px;"/> Interstitials
 
 Chame este composable em algum ponto antes do momento de mostrar o Interstitial:
 
@@ -88,7 +88,7 @@ val interstitials: Interstitials = InterstitialsFactory.admobInterstitial()
 interstitials.show("ID_DO_INTERSTITIAL_PREVIAMENTE_CARREGADO", activityContext)
 ```
 
-### Rewardeds <img src="docs/images/rewarded.svg" alt="Rewarded Ad" width="24" height="24" style="vertical-align: middle;"/>
+### <img src="docs/images/rewarded.svg" alt="Rewarded Ad" width="32" height="32" style="vertical-align: middle; margin-right: 10px;"/> Rewardeds
 
 Chame este composable em algum ponto antes do momento de mostrar o Rewarded:
 
@@ -105,7 +105,7 @@ rewarded.show(adId, activity) { rewardedItem ->
 }
 ```
 
-### Open Ads <img src="docs/images/appOpen.svg" alt="App Open Ad" width="24" height="24" style="vertical-align: middle;"/>
+### <img src="docs/images/appOpen.svg" alt="App Open Ad" width="32" height="32" style="vertical-align: middle; margin-right: 10px;"/> Open Ads
 
 Use delegação na MainActivity adicionando `AdsInitializer by AdmobInitializer()`:
 
