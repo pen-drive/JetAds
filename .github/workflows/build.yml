@@ -20,10 +20,11 @@ jobs:
       - name: Import GPG key
         env:
           GPG_SECRET_KEY_RING_FILE_BASE64: ${{ secrets.GPG_SECRET_KEY_RING_FILE_BASE64 }}
+          GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
         run: |
           echo "$GPG_SECRET_KEY_RING_FILE_BASE64" | base64 -d > secring.gpg
-          gpg --import secring.gpg --batch
-          gpg --list-keys  # Verifique se a chave foi importada
+          gpg --batch --passphrase="$GPG_PASSWORD" --import secring.gpg
+
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
