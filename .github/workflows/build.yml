@@ -19,11 +19,16 @@ jobs:
       - name: Import GPG key
         env:
           GPG_SECRET_KEY_RING_FILE: ${{ secrets.GPG_SECRET_KEY_RING_FILE_BASE64 }}
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+          GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
         run: |
           echo "$GPG_SECRET_KEY_RING_FILE" | base64 -d > secring.gpg
-          gpg --import secring.gpg
-          GPG_PRIVATE_KEY=$(gpg --export-secret-keys --armor $(gpg --list-secret-keys --keyid-format LONG | grep sec | awk '{print $2}' | awk -F'/' '{print $2}') secring.gpg | grep -v '\-\-' | grep -v '^=.' | tr -d '\n')
+          export GPG_TTY=$(tty)
+          gpg --batch --import secring.gpg
+          GPG_PRIVATE_KEY=$(gpg --batch --passphrase "$GPG_PASSWORD" --pinentry-mode loopback --export-secret-keys --armor $GPG_KEY_ID | grep -v '\-\-' | grep -v '^=.' | tr -d '\n')
           echo "GPG_PRIVATE_KEY=$GPG_PRIVATE_KEY" >> $GITHUB_ENV
+     
+         
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
