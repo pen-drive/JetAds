@@ -12,7 +12,7 @@ Adicione e gerencie anúncios de maneira fácil nos seus apps Jetpack Compose. U
 > [!CAUTION]
 > Esta biblioteca vai te incentivar a usar seus próprios IDs, então lembre-se de adicionar seu dispositivo/emulador como um [dispositivo de teste](https://developers.google.com/admob/android/test-ads#enable_test_devices).
 
-### Instalação
+## Instalação
 
 A maneira mais fácil de começar a usar o JetAds é adicioná-lo como uma dependência Gradle no arquivo `build.gradle` do seu módulo de app.
 
