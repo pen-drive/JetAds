@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -20,24 +21,12 @@ jobs:
         env:
           GPG_SECRET_KEY_RING_FILE_BASE64: ${{ secrets.GPG_SECRET_KEY_RING_FILE_BASE64 }}
         run: |
-          echo "$GPG_SECRET_KEY_RING_FILE_BASE64" | base64 -d | gpg --import --batch
-          gpg --list-keys  # Adicionado para verificar se a chave foi importada com sucesso
-
-      - name: Print Environment Variables
-        run: env  # Para depurar as variáveis de ambiente
-
-
-
-
-
-
-
+          echo "$GPG_SECRET_KEY_RING_FILE_BASE64" | base64 -d > secring.gpg
+          gpg --import secring.gpg --batch
+          gpg --list-keys  # Verifique se a chave foi importada
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-
-
-
 
       - name: Set release version
         run: |
@@ -46,10 +35,7 @@ jobs:
           echo "Extracted RELEASE_VERSION: $RELEASE_VERSION"
           echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
           ESCAPED_VERSION=$(printf '%s\n' "$RELEASE_VERSION" | sed -e 's/[\/&]/\\&/g')
-          echo "Escaped version: $ESCAPED_VERSION"
           sed -i "s/^version=.*/version=$ESCAPED_VERSION/" gradle.properties
-          echo "Contents of gradle.properties after sed:"
-          cat gradle.properties
 
       - name: Build with Gradle
         run: ./gradlew :JetAds:build
