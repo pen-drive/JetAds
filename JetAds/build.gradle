@@ -130,6 +130,14 @@ mavenPublishing {
     signAllPublications()
 }
 
+signing {
+    def gpgPrivateKey = System.getenv("GPG_PRIVATE_KEY")
+    def gpgKeyId = System.getenv("GPG_KEY_ID")
+    def gpgPassword = System.getenv("GPG_PASSWORD")
+    useInMemoryPgpKeys(gpgKeyId, gpgPrivateKey, gpgPassword)
+    sign(publishing.publications)
+}
+
 
 
 
