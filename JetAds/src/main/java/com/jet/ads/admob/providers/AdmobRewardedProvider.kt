@@ -8,6 +8,7 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.jet.ads.common.callbacks.FullRewardedShowAdCallbacks
 import com.jet.ads.common.callbacks.RewardedCallBack
 import com.jet.ads.utils.AdProvider
 
@@ -53,25 +54,37 @@ class AdmobRewardedProvider(
     ) {
         val reward = adPair.first
 
-        reward?.fullScreenContentCallback = object : FullScreenContentCallback() {
-            override fun onAdClicked() {
 
+        if (callbacks is FullRewardedShowAdCallbacks) {
+            reward?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdClicked() {
+                    callbacks.onAdClicked()
+                }
+
+                override fun onAdDismissedFullScreenContent() {
+                    onDismiss()
+                    callbacks.onAdDismissed()
+                }
+
+                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                    callbacks.onAdFailedToShow(adError)
+                }
+
+                override fun onAdImpression() {
+                    callbacks.onAdImpression()
+
+                }
+
+                override fun onAdShowedFullScreenContent() {
+                    callbacks.onAdShowed()
+
+                }
             }
-
-            override fun onAdDismissedFullScreenContent() {
-                onDismiss()
-            }
-
-            override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-
-            }
-
-            override fun onAdImpression() {
-
-            }
-
-            override fun onAdShowedFullScreenContent() {
-
+        }else{
+            reward?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdDismissedFullScreenContent() {
+                    onDismiss()
+                }
             }
         }
 

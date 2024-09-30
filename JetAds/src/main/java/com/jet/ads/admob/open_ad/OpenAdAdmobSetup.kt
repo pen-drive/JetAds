@@ -18,7 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import java.lang.ref.WeakReference
 
 
-internal class OpenAdAdmobSetup(
+internal class  OpenAdAdmobSetup(
 
     private val appLifecycleManager: AppLifecycleManager,
     private var controlLocator: ControlProvider = ControlProvider,
