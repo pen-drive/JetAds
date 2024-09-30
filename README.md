@@ -41,12 +41,12 @@ Adicione o seguinte no seu arquivo `AndroidManifest.xml`:
 ```kotlin
 class MainActivity : ComponentActivity(),
     AdsInitializer by AdsInitializeFactory.admobInitializer() {
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         initializeAds(this) // Inicializa os anúncios
-        
+
         setContent {
             Greeting(name = "Android")
         }
@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity(),
 }
 ```
 
-### Banner
+### Banner <img src="docs/images/banner.svg" alt="Banner Ad" width="24" height="24" style="vertical-align: middle;"/>
 
 Para adicionar um banner adaptativo:
 
@@ -73,7 +73,7 @@ Scaffold(
 }
 ```
 
-### Interstitials
+### Interstitials <img src="docs/images/interstitial.svg" alt="Interstitial Ad" width="24" height="24" style="vertical-align: middle;"/>
 
 Chame este composable em algum ponto antes do momento de mostrar o Interstitial:
 
@@ -88,7 +88,7 @@ val interstitials: Interstitials = InterstitialsFactory.admobInterstitial()
 interstitials.show("ID_DO_INTERSTITIAL_PREVIAMENTE_CARREGADO", activityContext)
 ```
 
-### Rewardeds
+### Rewardeds <img src="docs/images/rewarded.svg" alt="Rewarded Ad" width="24" height="24" style="vertical-align: middle;"/>
 
 Chame este composable em algum ponto antes do momento de mostrar o Rewarded:
 
@@ -105,7 +105,7 @@ rewarded.show(adId, activity) { rewardedItem ->
 }
 ```
 
-### Open Ads
+### Open Ads <img src="docs/images/appOpen.svg" alt="App Open Ad" width="24" height="24" style="vertical-align: middle;"/>
 
 Use delegação na MainActivity adicionando `AdsInitializer by AdmobInitializer()`:
 
