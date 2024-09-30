@@ -105,7 +105,7 @@ rewarded.show(adId, activity) { rewardedItem ->
 }
 ```
 
-### <img src="docs/images/appOpen.svg" alt="App Open Ad" width="32" height="32" style="vertical-align: middle; margin-right: 10px;"/> Open Ads
+### <img src="docs/images/appOpen.svg" alt="App Open Ad" width="64" height="64" style="vertical-align: middle; margin-right: 10px;"/> Open Ads
 
 Use delegação na MainActivity adicionando `AdsInitializer by AdmobInitializer()`:
 
