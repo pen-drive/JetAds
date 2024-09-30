@@ -8,7 +8,6 @@ import com.jet.ads.common.rewarded.Rewarded
 import com.jet.ads.common.callbacks.ShowAdCallBack
 import com.jet.ads.common.callbacks.FullRewardedShowAdCallbacks
 import com.jet.ads.common.callbacks.OnlyOnRewardedCallback
-import com.jet.ads.utils.pools.AdMobInterstitialPool
 import com.jet.ads.utils.pools.AdMobRewardedPool
 import kotlinx.coroutines.flow.Flow
 

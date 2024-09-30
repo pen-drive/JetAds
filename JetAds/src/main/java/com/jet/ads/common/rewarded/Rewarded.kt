@@ -1,7 +1,6 @@
 package com.jet.ads.common.rewarded
 
 import android.app.Activity
-import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.jet.ads.common.callbacks.ShowAdCallBack

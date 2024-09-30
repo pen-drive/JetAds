@@ -6,7 +6,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.jet.ads.utils.RewardedManagerFactory
 
 @Composable
-fun RewardedAdLoader(adId: String) {
+fun LoadRewarded(adId: String) {
     val context = LocalContext.current.applicationContext
 
     val rewardedManager: RewardedAdManager = RewardedManagerFactory.getAdmobRewardedManager()

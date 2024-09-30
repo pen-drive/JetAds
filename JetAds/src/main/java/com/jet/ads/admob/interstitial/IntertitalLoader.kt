@@ -1,13 +1,12 @@
 package com.jet.ads.admob.interstitial
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import com.jet.ads.utils.InterstitialManagerFactory
 
 @Composable
-fun InterstitialAdLoader(
+fun LoadInterstitial(
     adId: String,
 ) {
     val context = LocalContext.current.applicationContext

@@ -23,15 +23,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.consumer.R
 import com.example.consumer.presentation.components.Greeting
 import com.example.consumer.presentation.components.SwitchAds
 import com.jet.ads.admob.banner.AdaptiveBanner
-import com.jet.ads.admob.interstitial.InterstitialAdLoader
-import com.jet.ads.admob.rewarded.RewardedAdLoader
+import com.jet.ads.admob.interstitial.LoadInterstitial
+import com.jet.ads.admob.rewarded.LoadRewarded
 import com.jet.ads.admob.AdMobTestIds
 
 
@@ -50,8 +49,8 @@ fun MainScreen(viewModel: MainViewModel) {
 //    val someInterstitial = viewModel.interstitialsLoaded.collectAsStateWithLifecycle().value
 //    val someRewarded = viewModel.rewardedLoaded.collectAsStateWithLifecycle().value
 
-    InterstitialAdLoader(AdMobTestIds.INTERSTITIAL)
-    RewardedAdLoader(AdMobTestIds.REWARDED)
+    LoadInterstitial(AdMobTestIds.INTERSTITIAL)
+    LoadRewarded(AdMobTestIds.REWARDED)
 
     Scaffold(bottomBar = {
         AdaptiveBanner(AdMobTestIds.ADAPTIVE_BANNER)

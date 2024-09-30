@@ -8,8 +8,8 @@ import com.google.android.gms.ads.rewarded.RewardedAd
 import com.jet.ads.common.interstitial.Interstitials
 import com.jet.ads.common.interstitial.InterstitialsFactory
 import com.jet.ads.common.rewarded.RewardedFactory
-import com.jet.ads.common.callbacks.ShowAdCallBack
 import com.jet.ads.common.controller.JetAdsAdsControlImpl
+import com.jet.ads.common.rewarded.Rewarded
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -29,7 +29,7 @@ class MainViewModel : ViewModel() {
 
 
     private val interstitials: Interstitials = InterstitialsFactory.admobInterstitial()
-    private val rewarded = RewardedFactory.admobRewarded()
+    private val rewarded: Rewarded = RewardedFactory.admobRewarded()
 
     init {
         viewModelScope.launch {
@@ -66,9 +66,9 @@ class MainViewModel : ViewModel() {
     fun onEvent(event: MainScreenEvents) {
         when (event) {
             is MainScreenEvents.RewardedInterstitial -> {
-                rewarded.show(event.adId, event.activity) {
+                rewarded.show(event.adId, event.activity, onRewarded = { rewardedItem ->
 
-                }
+                })
             }
 
             is MainScreenEvents.ShowInterstitial -> {
