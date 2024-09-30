@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity(),
 }
 ```
 
-### <img src="docs/images/banner.svg" alt="Banner Ad" width="32" height="32" style="vertical-align: middle; margin-right: 10px;"/> Banner
+### <img src="docs/images/banner.svg" alt="Banner Ad" width="40" height="40" style="vertical-align: middle; margin-right: 10px;"/><span style="display: inline-block; vertical-align: middle; line-height: 40px;">Banner</span>
 
 Para adicionar um banner adaptativo:
 
@@ -73,7 +73,7 @@ Scaffold(
 }
 ```
 
-### <img src="docs/images/interstitial.svg" alt="Interstitial Ad" width="32" height="32" style="vertical-align: middle; margin-right: 10px;"/> Interstitials
+### <img src="docs/images/interstitial.svg" alt="Interstitial Ad" width="40" height="40" style="vertical-align: middle; margin-right: 10px;"/><span style="display: inline-block; vertical-align: middle; line-height: 40px;">Interstitials</span>
 
 Chame este composable em algum ponto antes do momento de mostrar o Interstitial:
 
@@ -88,7 +88,7 @@ val interstitials: Interstitials = InterstitialsFactory.admobInterstitial()
 interstitials.show("ID_DO_INTERSTITIAL_PREVIAMENTE_CARREGADO", activityContext)
 ```
 
-### <img src="docs/images/rewarded.svg" alt="Rewarded Ad" width="32" height="32" style="vertical-align: middle; margin-right: 10px;"/> Rewardeds
+### <img src="docs/images/rewarded.svg" alt="Rewarded Ad" width="40" height="40" style="vertical-align: middle; margin-right: 10px;"/><span style="display: inline-block; vertical-align: middle; line-height: 40px;">Rewardeds</span>
 
 Chame este composable em algum ponto antes do momento de mostrar o Rewarded:
 
@@ -105,7 +105,7 @@ rewarded.show(adId, activity) { rewardedItem ->
 }
 ```
 
-### <img src="docs/images/appOpen.svg" alt="App Open Ad" width="64" height="64" style="vertical-align: middle; margin-right: 10px;"/> Open Ads
+### <img src="docs/images/appOpen.svg" alt="App Open Ad" width="40" height="40" style="vertical-align: middle; margin-right: 10px;"/><span style="display: inline-block; vertical-align: middle; line-height: 40px;">Open Ads</span>
 
 Use delegação na MainActivity adicionando `AdsInitializer by AdmobInitializer()`:
 
