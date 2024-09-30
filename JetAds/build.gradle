@@ -131,13 +131,4 @@ mavenPublishing {
 }
 
 
-signing {
-    def signingKeyId = findProperty("SIGNING_KEY_ID")
-    def signingPassword = findProperty("SIGNING_PASSWORD")
-    def signingSecretKeyRingFile = findProperty("SIGNING_SECRET_KEY_RING_FILE")
-    useInMemoryPgpKeys(signingKeyId, signingPassword, signingSecretKeyRingFile)
-    sign publishing.publications
-}
-
-
 

@@ -41,19 +41,19 @@ jobs:
         run: |
           echo $GPG_SECRET_KEY | base64 --decode > ./secret.gpg
 
-
       # Build the project with Gradle
       - name: Build with Gradle
         run: ./gradlew :JetAds:build --warning-mode all
 
-      # Publish the build to Maven Central
-      - name: Publish to Maven Central
+
+      # Publish the build to Maven Central using in-memory signing
+      - name: Publish to Maven Central (In-memory signing)
         env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-          SIGNING_KEY_ID: ${{ secrets.GPG_KEY_ID }}
-          SIGNING_PASSWORD: ${{ secrets.GPG_PASSWORD }}
-          SIGNING_SECRET_KEY_RING_FILE: ./secret.gpg
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_SECRET_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.GPG_KEY_ID }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSWORD }}
         run: ./gradlew publishAllPublicationsToMavenCentral --no-configuration-cache --info
 
       # Upload the release asset to GitHub releases
