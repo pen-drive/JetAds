@@ -21,9 +21,23 @@ jobs:
           GPG_SECRET_KEY_RING_FILE_BASE64: ${{ secrets.GPG_SECRET_KEY_RING_FILE_BASE64 }}
         run: |
           echo "$GPG_SECRET_KEY_RING_FILE_BASE64" | base64 -d | gpg --import --batch
+          gpg --list-keys  # Adicionado para verificar se a chave foi importada com sucesso
+
+      - name: Print Environment Variables
+        run: env  # Para depurar as variáveis de ambiente
+
+
+
+
+
+
+
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
+
+
 
       - name: Set release version
         run: |
