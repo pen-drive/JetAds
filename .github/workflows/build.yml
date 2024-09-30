@@ -41,6 +41,7 @@ jobs:
         run: |
           echo $GPG_SECRET_KEY | base64 --decode > ./secret.gpg
 
+
       # Set the release version from the GitHub tag
       - name: Set release version
         run: |
