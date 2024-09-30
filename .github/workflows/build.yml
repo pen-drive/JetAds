@@ -42,13 +42,6 @@ jobs:
           echo $GPG_SECRET_KEY | base64 --decode > ./secret.gpg
 
 
-      # Set the release version from the GitHub tag
-      - name: Set release version
-        run: |
-          RELEASE_VERSION=${GITHUB_REF#refs/tags/}
-          echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
-          sed -i "s/^version=.*/version=$RELEASE_VERSION/" gradle.properties
-
       # Build the project with Gradle
       - name: Build with Gradle
         run: ./gradlew :JetAds:build --warning-mode all
