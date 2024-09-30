@@ -1,161 +1,141 @@
-<h1><img src="docs/images/badge.png" alt="JetAds" width="32"/> JetAds </h1>
+# <img src="docs/images/badge.png" alt="JetAds" width="32"/> JetAds
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.pen-drive/jet-ads)](https://search.maven.org/artifact/io.github.pen-drive/jet-ads)
 [![License](https://img.shields.io/github/license/karacca/beetle)](https://www.apache.org/licenses/LICENSE-2.0)
 
+Plug and Earn
 
-Plug adn Earn
+## Easy Ads for Jetpack Compose
 
+Adicione e gerencie anúncios de maneira fácil nos seus apps Jetpack Compose. Uma biblioteca para tornar mais simples a implementação do AdMob.
 
-## `Easy Ads` for Jetpack Compose
+> [!CAUTION]
+> Esta biblioteca vai te incentivar a usar seus próprios IDs, então lembre-se de adicionar seu dispositivo/emulador como um [dispositivo de teste](https://developers.google.com/admob/android/test-ads#enable_test_devices).
 
-Adicione, gerencie ads de maneira facil nos seus apps jetpack compose. Uma lib para tornar mais facil
-a implementacao do admob.
+### Instalação
 
-
-
->[!CAUTION]
-> Esta lib vai te ensentivar a usar seus proprios ids tão lembre de adicionar seu dispositivo/emulador
-> como um [dispositivo de test](https://developers.google.com/admob/android/test-ads#enable_test_devices)
-
-
-### Installation
-
-The easiest way to get started using JetAds is to add it as a gradle dependency in the build.gradle file
-of your app module.
-
-```gradle
-implementation 'io.github.pen-drive:jet-ads:1.0.1'
-```
-
-or if your project using `build.gradle.kts`
+A maneira mais fácil de começar a usar o JetAds é adicioná-lo como uma dependência Gradle no arquivo `build.gradle` do seu módulo de app.
 
 ```kotlin
 implementation("io.github.pen-drive:jet-ads:1.0.1")
 ```
 
-
 > [!TIP]
-> Não precisa adicionar a depencia do Admob, poi ela ja é adicionada ao seu projeto por meio de 
-> dependencia transitiva.
+> Não é necessário adicionar a dependência do AdMob, pois ela já é incluída no seu projeto por meio de dependência transitiva.
 
+### Adicione meta-data do AdMob
 
-### Adicione admob meta-data
+Adicione o seguinte no seu arquivo `AndroidManifest.xml`:
 
-    <meta-data
-        android:name="com.google.android.gms.ads.APPLICATION_ID"
-        android:value="ca-app-pub-3940256099942544~3347511713"/>
-
->[!TIP]
-> Altere pelo APPLICATION_ID do seu app! o APPLICATION_ID é um de teste fornecido pelo
-> [admob](https://developers.google.com/admob/android/test-ads)
-
-
-
-
-
-### inicialize ads
-
-
-```kotlin
-    class MainActivity : ComponentActivity(),
-    AdsInitializer by AdsInitializeFactory.admobInitializer() // <-- Esta lib Usa delegação para fazer seu trabalho! 
-{
-    
-    
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            
-            initializeAds(this) // <-- initialize ads
-            
-    
-            setContent {
-    
-                Greeting(
-                    name = "Android",
-                )
-    
-            }
-        }
-    }
+```xml
+<meta-data
+    android:name="com.google.android.gms.ads.APPLICATION_ID"
+    android:value="ca-app-pub-3940256099942544~3347511713"/>
 ```
 
+> [!TIP]
+> Altere para o APPLICATION_ID do seu app! O ID acima é um ID de teste fornecido pelo [AdMob](https://developers.google.com/admob/android/test-ads).
+
+### Inicialize os anúncios
+
+```kotlin
+class MainActivity : ComponentActivity(),
+    AdsInitializer by AdsInitializeFactory.admobInitializer() {
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        
+        initializeAds(this) // Inicializa os anúncios
+        
+        setContent {
+            Greeting(name = "Android")
+        }
+    }
+}
+```
 
 ### Banner
-    
-       AdaptiveBanner({ID DO SEU BANNER})
 
-Esta é a maneira de posicionar o banner n aparte de baixo da tela:
+Para adicionar um banner adaptativo:
 
-        Scaffold(modifier = Modifier.fillMaxSize(), bottomBar = {AdaptiveBanner(AdMobTestIds.ADAPTIVE_BANNER)}) { innerPadding ->
-            Greeting(name = "Android",modifier = Modifier.padding(innerPadding))
-        }
+```kotlin
+AdaptiveBanner("SEU_ID_DE_BANNER")
+```
 
+Para posicionar o banner na parte inferior da tela:
 
-
-
-
+```kotlin
+Scaffold(
+    modifier = Modifier.fillMaxSize(),
+    bottomBar = { AdaptiveBanner(AdMobTestIds.ADAPTIVE_BANNER) }
+) { innerPadding ->
+    Greeting(name = "Android", modifier = Modifier.padding(innerPadding))
+}
+```
 
 ### Interstitials
 
-chame este composable em algum ponte antes do momente de mostrar o Interstitial
+Chame este composable em algum ponto antes do momento de mostrar o Interstitial:
 
-    LoadInterstitial({ID DO SEU INTERSTITIAL})
+```kotlin
+LoadInterstitial("SEU_ID_DE_INTERSTITIAL")
+```
 
 Para mostrar o Interstitial:
 
-    val interstitials: Interstitials = InterstitialsFactory.admobInterstitial()
-    interstitials.show({ID DO REWARDED PREVIAMENTE CARREGADO}, {ACTIVITY CONTEXT})
-
-
+```kotlin
+val interstitials: Interstitials = InterstitialsFactory.admobInterstitial()
+interstitials.show("ID_DO_INTERSTITIAL_PREVIAMENTE_CARREGADO", activityContext)
+```
 
 ### Rewardeds
 
-chame este composable em algum ponte antes do momente de mostrar o Rewarded
+Chame este composable em algum ponto antes do momento de mostrar o Rewarded:
 
-    LoadRewarded(AdMobTestIds.REWARDED)
-
+```kotlin
+LoadRewarded(AdMobTestIds.REWARDED)
+```
 
 Para mostrar o Rewarded:
 
-    val rewarded: Rewarded = RewardedFactory.admobRewarded()
-    rewarded.show(event.adId, event.activity, onRewarded = { rewardedItem -> }) 
+```kotlin
+val rewarded: Rewarded = RewardedFactory.admobRewarded()
+rewarded.show(adId, activity) { rewardedItem -> 
+    // Lógica para lidar com a recompensa
+}
+```
 
+### Open Ads
 
+Use delegação na MainActivity adicionando `AdsInitializer by AdmobInitializer()`:
 
-### Open Adds
-Usando delegacao na MainActivity adicione:  AdsInitializer by AdmobInitializer():
+```kotlin
+class MainActivity : AppCompatActivity(), AdsInitializer by AdmobInitializer()
+```
 
-    class MainActivity : AppCompatActivity(), AdsInitializer by AdmobInitializer(){}
+### IDs para Testes
 
+A biblioteca fornece o objeto `AdMobTestIds` para acessar todos os IDs de [teste do AdMob](https://developers.google.com/admob/android/test-ads):
 
+```kotlin
+object AdMobTestIds {
+    const val APP_OPEN = "ca-app-pub-3940256099942544/9257395921"
+    const val ADAPTIVE_BANNER = "ca-app-pub-3940256099942544/9214589741"
+    const val INTERSTITIAL = "ca-app-pub-3940256099942544/1033173712"
+    const val REWARDED = "ca-app-pub-3940256099942544/5224354917"
+}
+```
 
-### Ids para Testes
-A lib fornce o objeto AdMobTestIds por meio dele você consegue acessar todos os ids de [test do admob](https://developers.google.com/admob/android/test-ads):
+## Próximas features (possivelmente)
 
-    object AdMobTestIds {
-        const val APP_OPEN = "ca-app-pub-3940256099942544/9257395921"
-        const val ADAPTIVE_BANNER = "ca-app-pub-3940256099942544/9214589741"
-        const val INTERSTITIAL = "ca-app-pub-3940256099942544/1033173712"
-        const val REWARDED = "ca-app-pub-3940256099942544/5224354917"
-    }
+- Native ads
+- Mediação
 
+## Contribuindo
 
+Contribuições de novas funcionalidades ou correções de bugs são sempre bem-vindas. Por favor, submeta uma nova issue ou pull request a qualquer momento.
 
-
-
-
-
-# Proximas features, possivelmente!
-
- * Native ads
- * Mediação
-
-
-
-### Contributing
-
-The contribution of new features or bug fixes is always welcome. <br />
-Please submit new issue or pull request anytime. Contribua com a lib: Esta lib tem a filosofia de ser facil de usar, deve-sempre esconder as implemenações
-dos users da lib, sempre senguin a filosofia "Plug and Earn". Ao contribuir tenha cuidado com memory leaks! no
-App de Demostração ja esta adicionado o LeakCanary, sempre cheque se sua alteração não provocou algum memoty leak.
+Ao contribuir, tenha em mente:
+- A filosofia da biblioteca é ser fácil de usar, sempre escondendo as implementações complexas dos usuários.
+- Siga o princípio "Plug and Earn".
+- Tenha cuidado com memory leaks! O app de demonstração já inclui o LeakCanary; sempre verifique se sua alteração não provocou algum vazamento de memória.
