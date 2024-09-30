@@ -16,34 +16,20 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Import GPG key
-        env:
-          GPG_SECRET_KEY_RING_FILE: ${{ secrets.GPG_SECRET_KEY_RING_FILE_BASE64 }}
-          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
-          GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
-        run: |
-          echo "$GPG_SECRET_KEY_RING_FILE" | base64 -d > secring.gpg
-          export GPG_TTY=$(tty)
-          gpg --batch --import secring.gpg
-          GPG_PRIVATE_KEY=$(gpg --batch --passphrase "$GPG_PASSWORD" --pinentry-mode loopback --export-secret-keys --armor $GPG_KEY_ID | grep -v '\-\-' | grep -v '^=.' | tr -d '\n')
-          echo "GPG_PRIVATE_KEY=$GPG_PRIVATE_KEY" >> $GITHUB_ENV
-     
-         
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Decode GPG key
+        env:
+          GPG_SECRET_KEY: ${{ secrets.GPG_SECRET_KEY_RING_FILE_BASE64 }}
+        run: |
+          echo $GPG_SECRET_KEY | base64 --decode > ./secret.gpg
 
       - name: Set release version
         run: |
           RELEASE_VERSION=${GITHUB_REF#refs/tags/}
-          echo "Raw GITHUB_REF: $GITHUB_REF"
-          echo "Extracted RELEASE_VERSION: $RELEASE_VERSION"
           echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
-          ESCAPED_VERSION=$(printf '%s\n' "$RELEASE_VERSION" | sed -e 's/[\/&]/\\&/g')
-          echo "Escaped version: $ESCAPED_VERSION"
-          sed -i "s/^version=.*/version=$ESCAPED_VERSION/" gradle.properties
-          echo "Contents of gradle.properties after sed:"
-          cat gradle.properties
+          sed -i "s/^version=.*/version=$RELEASE_VERSION/" gradle.properties
 
       - name: Build with Gradle
         run: ./gradlew :JetAds:build
@@ -52,9 +38,9 @@ jobs:
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
-          GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
-          GPG_PRIVATE_KEY: ${{ env.GPG_PRIVATE_KEY }}
+          SIGNING_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+          SIGNING_PASSWORD: ${{ secrets.GPG_PASSWORD }}
+          SIGNING_SECRET_KEY_RING_FILE: ./secret.gpg
         run: ./gradlew publishAllPublicationsToMavenCentral --no-configuration-cache
 
       - name: Upload Release Asset
