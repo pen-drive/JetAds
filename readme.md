@@ -1,6 +1,6 @@
 <h1><img src="docs/images/badge.png" alt="JetAds" width="32"/> JetAds </h1>
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.karacca/beetle)](https://search.maven.org/artifact/com.karacca/beetle)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.pen-drive/jet-ads)](https://search.maven.org/artifact/io.github.pen-drive/jet-ads)
 [![License](https://img.shields.io/github/license/karacca/beetle)](https://www.apache.org/licenses/LICENSE-2.0)
 
 
