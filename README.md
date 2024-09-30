@@ -56,8 +56,11 @@ implementation("io.github.pen-drive:jet-ads:1.0.1")
 
 ### inicialize ads
 
+
+```kotlin
     class MainActivity : ComponentActivity(),
-    AdsInitializer by AdsInitializeFactory.admobInitializer() {
+    AdsInitializer by AdsInitializeFactory.admobInitializer() // <-- Esta lib Usa delegação para fazer seu trabalho! 
+{
     
     
         override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +78,7 @@ implementation("io.github.pen-drive:jet-ads:1.0.1")
             }
         }
     }
-
+```
 
 
 ### Banner
