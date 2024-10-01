@@ -40,7 +40,7 @@ fun MainScreen(viewModel: MainViewModel) {
     val activity = LocalContext.current as Activity
     val scrollableState = rememberScrollState()
 
-    val areAdsEnabled = viewModel.isToShowAdds.collectAsStateWithLifecycle().value
+    val isAdsEnabled = viewModel.isToShowAdds.collectAsStateWithLifecycle().value
 
 
     /**
@@ -68,7 +68,7 @@ fun MainScreen(viewModel: MainViewModel) {
             Spacer(modifier = Modifier.height(40.dp))
 
 
-            SwitchAds(areAdsEnabled, toggleAds = {
+            SwitchAds(isAdsEnabled, toggleAds = {
                 viewModel.onEvent(MainScreenEvents.ToggleAds)
             })
 
@@ -82,7 +82,7 @@ fun MainScreen(viewModel: MainViewModel) {
                             AdMobTestIds.INTERSTITIAL, activity
                         )
                     )
-                }, enabled =  areAdsEnabled) {
+                }, enabled =  isAdsEnabled) {
                     Text(stringResource(R.string.mostrar_interstitial))
                 }
 
@@ -93,7 +93,7 @@ fun MainScreen(viewModel: MainViewModel) {
                             AdMobTestIds.REWARDED, activity
                         )
                     )
-                }, enabled = areAdsEnabled) {
+                }, enabled = isAdsEnabled) {
                     Text(stringResource(R.string.mostrar_rewarded))
                 }
             }
