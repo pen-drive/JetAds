@@ -12,9 +12,7 @@ tornar mais simples a implementação do AdMob.
 
 > [!CAUTION]
 > SE voce não estiver usando IDs de teste, então lembre-se de adicionar seu dispositivo/emulador
-> como
->
-um [dispositivo de teste](https://developers.google.com/admob/android/test-ads#enable_test_devices).
+> como um [dispositivo de teste](https://developers.google.com/admob/android/test-ads#enable_test_devices).
 
 ## Instalação
 
@@ -26,22 +24,29 @@ implementation("io.github.pen-drive:jet-ads:1.0.1")
 ```
 
 > [!TIP]
-> Não é necessário adicionar a dependência do AdMob, pois ela já é incluída no seu projeto por meio
+> Não é necessário adicionar a dependência do [AdMob/Google Ads](https://developers.google.com/admob/android/quick-start), pois ela já é incluída no seu projeto por meio
 > de dependência transitiva.
 
 ### Adicione meta-data do AdMob
 
-Adicione o seguinte no seu arquivo `AndroidManifest.xml`:
+Apos adicionar a lib Adicione a seguinte meta-data no seu arquivo `AndroidManifest.xml`, :
 
 ```xml
-
-<meta-data android:name="com.google.android.gms.ads.APPLICATION_ID"
-    android:value="ca-app-pub-3940256099942544~3347511713" />
+<manifest>
+  <application>
+    <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+    <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy"/>
+  </application>
+</manifest>
 ```
-
 > [!TIP]
 > Altere para o APPLICATION_ID do seu app! O ID acima é um ID de teste fornecido
-> pelo [AdMob](https://developers.google.com/admob/android/test-ads).
+> pelo [AdMob](https://developers.google.com/admob/android/quick-start#:~:text=%3Cmanifest%3E%0A%20%20%3Capplication%3E%0A%20%20%20%20%3C!%2D%2D%20Sample%20AdMob%20app%20ID%3A%20ca%2Dapp%2Dpub%2D3940256099942544~3347511713%20%2D%2D%3E%0A%20%20%20%20%3Cmeta%2Ddata%0A%20%20%20%20%20%20%20%20android%3Aname%3D%22com.google.android.gms.ads.APPLICATION_ID%22%0A%20%20%20%20%20%20%20%20android%3Avalue%3D%22ca%2Dapp%2Dpub%2Dxxxxxxxxxxxxxxxx~yyyyyyyyyy%22/%3E%0A%20%20%3C/application%3E%0A%3C/manifest%3E).
+
+
+
 
 ### Inicialize os anúncios
 
