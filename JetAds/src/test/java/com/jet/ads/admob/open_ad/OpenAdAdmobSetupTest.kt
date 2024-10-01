@@ -14,16 +14,10 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.slot
 import io.mockk.verify
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import kotlin.time.Duration.Companion.seconds
-
 
 
 class OpenAdAdmobSetupTest {
@@ -65,7 +59,7 @@ class OpenAdAdmobSetupTest {
     fun `registerOpenAppAd when ads are disabled`() = runTest {
         adsEnabledFlow.value = false
 
-        openAdAdmobSetup.registerOpenAppAd(
+        openAdAdmobSetup.registerAppOpenAd(
             "test_ad_unit_id", mockActivity, true, mockShowAdCallBack
         ) {}
 
@@ -79,7 +73,7 @@ class OpenAdAdmobSetupTest {
     @Test
     fun `onAppStart shows ad when ads are enabled`() = runTest {
         val adUnitId = "test_ad_unit_id"
-        openAdAdmobSetup.registerOpenAppAd(adUnitId, mockActivity, true, mockShowAdCallBack) {}
+        openAdAdmobSetup.registerAppOpenAd(adUnitId, mockActivity, true, mockShowAdCallBack) {}
 
         openAdAdmobSetup.onAppStart()
 
@@ -92,7 +86,7 @@ class OpenAdAdmobSetupTest {
     fun `onAppStart does not show ad when ads are disabled`() = runTest {
         adsEnabledFlow.value = false
         val adUnitId = "test_ad_unit_id"
-        openAdAdmobSetup.registerOpenAppAd(adUnitId, mockActivity, true, mockShowAdCallBack) {}
+        openAdAdmobSetup.registerAppOpenAd(adUnitId, mockActivity, true, mockShowAdCallBack) {}
 
         openAdAdmobSetup.onAppStart()
 
@@ -104,7 +98,7 @@ class OpenAdAdmobSetupTest {
     @Test
     fun `lifecycle observer is added and removed correctly`() = runTest {
         val adUnitId = "test_ad_unit_id"
-        openAdAdmobSetup.registerOpenAppAd(adUnitId, mockActivity, true, mockShowAdCallBack) {}
+        openAdAdmobSetup.registerAppOpenAd(adUnitId, mockActivity, true, mockShowAdCallBack) {}
 
         val observerSlot = slot<LifecycleEventObserver>()
         verify { mockLifecycle.addObserver(capture(observerSlot)) }
@@ -123,7 +117,7 @@ class OpenAdAdmobSetupTest {
         val adUnitId = "test_ad_unit_id"
         val closeSplashScreen: () -> Unit = mockk(relaxed = true)
 
-        openAdAdmobSetup.registerOpenAppAd(
+        openAdAdmobSetup.registerAppOpenAd(
             adUnitId, mockActivity, true, mockShowAdCallBack, closeSplashScreen
         )
 
@@ -141,7 +135,7 @@ class OpenAdAdmobSetupTest {
 
         every { mockAppLifecycleManager.isFirstEntry() } returns false
 
-        openAdAdmobSetup.registerOpenAppAd(
+        openAdAdmobSetup.registerAppOpenAd(
             adUnitId, mockActivity, true, mockShowAdCallBack, closeSplashScreen
         )
 
@@ -177,7 +171,7 @@ class OpenAdAdmobSetupTest {
             onFailedToLoadSlot.captured.invoke(LoadAdError(0, "", "", null, null))
         }
 
-        openAdAdmobSetup.registerOpenAppAd(
+        openAdAdmobSetup.registerAppOpenAd(
             adUnitId, mockActivity, true, mockShowAdCallBack, closeSplashScreen
         )
 

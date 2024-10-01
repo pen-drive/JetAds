@@ -32,7 +32,7 @@ internal class  OpenAdAdmobSetup(
     private var callbacks: OpenAppShowAdCallbacks? = null
     private var closeSplashScreenRef: WeakReference<(() -> Unit)>? = null
 
-    override fun registerOpenAppAd(
+    override fun registerAppOpenAd(
         adUnitId: String,
         activity: ComponentActivity,
         showOnColdStart: Boolean,
