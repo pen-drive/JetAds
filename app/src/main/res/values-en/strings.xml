@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
     <string name="app_name">JetAds</string>
     <string name="title_activity_main_comp">JetAds</string>
 
@@ -14,4 +16,6 @@
     <string name="contribui_es_e_sugest_es_s_o_muito_bem_vidas_github">Contributions and suggestions are very welcome! GitHub</string>
     <string name="show_interstitial">Show interstitial</string>
     <string name="show_rewarded">Show rewarded</string>
+
+
 </resources>
