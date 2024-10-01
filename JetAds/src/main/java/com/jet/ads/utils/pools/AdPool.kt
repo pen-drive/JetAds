@@ -1,6 +1,7 @@
 package com.jet.ads.utils.pools
 
 import android.os.SystemClock
+import android.util.Log
 import androidx.annotation.VisibleForTesting
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -24,6 +25,8 @@ internal abstract class BaseAdPool<T : Any> : AdPool<T> {
 
     override fun saveAd(adUnitId: String, ad: T) {
         ads[adUnitId] = Pair(ad, SystemClock.elapsedRealtime())
+        Log.d("AAA", "saveAd ads = ${ads.toList()}")
+
         emitAds()
     }
 

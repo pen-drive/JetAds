@@ -23,10 +23,11 @@ class MainActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val splash = installSplashScreen()
+
 
         initializeAds(this, adsControl = adsControl)
 
-        val splash = installSplashScreen()
 
         splash.setKeepOnScreenCondition { keepSplashScreen }
 
