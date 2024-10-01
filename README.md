@@ -3,11 +3,11 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.pen-drive/jet-ads)](https://search.maven.org/artifact/io.github.pen-drive/jet-ads)
 [![License](https://img.shields.io/github/license/karacca/beetle)](https://www.apache.org/licenses/LICENSE-2.0)
 
-Plug and Earn
+
 
 ## Easy Ads for Jetpack Compose
 
-Add and manage ads easily in your Jetpack Compose apps. A library to simplify AdMob implementation.
+Easily integrate and manage ads in your Jetpack Compose apps with a library that simplifies AdMob implementation. It’s like 'Plug and Earn!'
 
 > [!CAUTION]
 > If you're not using test IDs, remember to add your device/emulator as a [test device](https://developers.google.com/admob/android/test-ads#enable_test_devices).
@@ -98,14 +98,14 @@ interstitials.show("PREVIOUSLY_LOADED_INTERSTITIAL_ID", activityContext)
 Call this composable at some point before showing the Rewarded:
 
 ```kotlin
-LoadRewarded(AdMobTestIds.REWARDED)
+LoadRewarded("YOUR_REWARDED_ID")
 ```
 
 To show the Rewarded:
 
 ```kotlin
 val rewarded: Rewarded = RewardedFactory.admobRewarded()
-rewarded.show(adId, activity) { rewardedItem ->
+rewarded.show("PREVIOUSLY_LOADED_REWARDED_ID", activity) { rewardedItem ->
     // Logic to handle the reward
 }
 ```
@@ -127,7 +127,7 @@ class MainActivity : ComponentActivity(),
         super.onCreate(savedInstanceState)
         initializeAds(this)
 
-        registerAppOpenAd(AdMobTestIds.APP_OPEN, this)  // <-- for app open ads
+        registerAppOpenAd("YOUR_APP_OPEN_ID", this)  // <-- for app open ads
 
         setContent {
             //Compose content
@@ -199,5 +199,5 @@ Contributions of new features or bug fixes are always welcome. Please submit a n
 When contributing, keep in mind:
 
 - The library's philosophy is to be easy to use, always hiding complex implementations from users.
-- Follow the "Plug and Earn" principle.
+- Contributors must follow the 'Plug and Earn' principle, ensuring that this library remains simple and easy to use for developers.
 - Be careful with memory leaks! The demo app already includes LeakCanary; always check if your change hasn't caused any memory leaks. You need to add [LeakCanary to the pipeline](https://square.github.io/leakcanary/ui-tests/#leak-detection-in-ui-tests).
