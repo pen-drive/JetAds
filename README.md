@@ -188,17 +188,21 @@ Sera preciso adicionar a api de [splashScreen](https://www.youtube.com/watch?v=a
 splash screen resulta em um atraso na exeibição do ad, o que pode incomodar o user. Vale dar uma lida nas [melhores praticas para app open ads](https://support.google.com/admob/answer/9341964)
 
 
-### IDs para Testes
+## IDs para Testes
 
 A biblioteca fornece o objeto `AdMobTestIds` para acessar todos os IDs
 de [teste do AdMob](https://developers.google.com/admob/android/test-ads):
 
 ```kotlin
 object AdMobTestIds {
-    const val APP_OPEN = "ca-app-pub-3940256099942544/9257395921"
-    const val ADAPTIVE_BANNER = "ca-app-pub-3940256099942544/9214589741"
-    const val INTERSTITIAL = "ca-app-pub-3940256099942544/1033173712"
-    const val REWARDED = "ca-app-pub-3940256099942544/5224354917"
+  const val APP_OPEN = "ca-app-pub-3940256099942544/9257395921"
+  const val ADAPTIVE_BANNER = "ca-app-pub-3940256099942544/9214589741"
+  const val INTERSTITIAL = "ca-app-pub-3940256099942544/1033173712"
+  const val REWARDED = "ca-app-pub-3940256099942544/5224354917"
+  const val NATIVE = "ca-app-pub-3940256099942544/2247696110"
+  const val FIXED_SIZE_BANNER = "ca-app-pub-3940256099942544/6300978111"
+  const val REWARDED_INTERSTITIAL = "ca-app-pub-3940256099942544/5354046379"
+  const val NATIVE_VIDEO = "ca-app-pub-3940256099942544/1044960115"
 }
 ```
 
