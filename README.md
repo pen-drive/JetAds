@@ -7,34 +7,41 @@ Plug and Earn
 
 ## Easy Ads for Jetpack Compose
 
-Adicione e gerencie anúncios de maneira fácil nos seus apps Jetpack Compose. Uma biblioteca para tornar mais simples a implementação do AdMob.
+Adicione e gerencie anúncios de maneira fácil nos seus apps Jetpack Compose. Uma biblioteca para
+tornar mais simples a implementação do AdMob.
 
 > [!CAUTION]
-> Esta biblioteca vai te incentivar a usar seus próprios IDs, então lembre-se de adicionar seu dispositivo/emulador como um [dispositivo de teste](https://developers.google.com/admob/android/test-ads#enable_test_devices).
+> SE voce não estiver usando IDs de teste, então lembre-se de adicionar seu dispositivo/emulador
+> como
+>
+um [dispositivo de teste](https://developers.google.com/admob/android/test-ads#enable_test_devices).
 
 ## Instalação
 
-A maneira mais fácil de começar a usar o JetAds é adicioná-lo como uma dependência Gradle no arquivo `build.gradle` do seu módulo de app.
+A maneira mais fácil de começar a usar o JetAds é adicioná-lo como uma dependência Gradle no
+arquivo `build.gradle` do seu módulo de app.
 
 ```kotlin
 implementation("io.github.pen-drive:jet-ads:1.0.1")
 ```
 
 > [!TIP]
-> Não é necessário adicionar a dependência do AdMob, pois ela já é incluída no seu projeto por meio de dependência transitiva.
+> Não é necessário adicionar a dependência do AdMob, pois ela já é incluída no seu projeto por meio
+> de dependência transitiva.
 
 ### Adicione meta-data do AdMob
 
 Adicione o seguinte no seu arquivo `AndroidManifest.xml`:
 
 ```xml
-<meta-data
-    android:name="com.google.android.gms.ads.APPLICATION_ID"
-    android:value="ca-app-pub-3940256099942544~3347511713"/>
+
+<meta-data android:name="com.google.android.gms.ads.APPLICATION_ID"
+    android:value="ca-app-pub-3940256099942544~3347511713" />
 ```
 
 > [!TIP]
-> Altere para o APPLICATION_ID do seu app! O ID acima é um ID de teste fornecido pelo [AdMob](https://developers.google.com/admob/android/test-ads).
+> Altere para o APPLICATION_ID do seu app! O ID acima é um ID de teste fornecido
+> pelo [AdMob](https://developers.google.com/admob/android/test-ads).
 
 ### Inicialize os anúncios
 
@@ -100,22 +107,89 @@ Para mostrar o Rewarded:
 
 ```kotlin
 val rewarded: Rewarded = RewardedFactory.admobRewarded()
-rewarded.show(adId, activity) { rewardedItem -> 
+rewarded.show(adId, activity) { rewardedItem ->
     // Lógica para lidar com a recompensa
 }
 ```
 
 ## <img src="docs/images/appOpen.svg" alt="App Open Ad" width="64" height="64" style="vertical-align: middle; margin-right: 10px;"/><span style="display: inline-block; vertical-align: middle; line-height: 40px;">Open Ads</span>
 
-Use delegação na MainActivity adicionando `AdsInitializer by AdmobInitializer()`:
+Adicione OpenAdSetup a sua activtity e use a delecagçao corespondente!
+
+Maneira para mostrar ads sempre que o app entrar no primeiro plano
 
 ```kotlin
-class MainActivity : AppCompatActivity(), AdsInitializer by AdmobInitializer()
+class MainActivity : ComponentActivity(),
+    AdsInitializer by AdsInitializeFactory.admobInitializer() {
+
+
+    private var keepSplashScreen = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initializeAds(this)
+
+        registerAppOpenAd(AdMobTestIds.APP_OPEN, this)
+
+        setContent {
+            SampleJetAdsTheme {
+                //content
+            }
+        }
+    }
+
+
+}
 ```
+
+Maneira para mostrar ads sempre que o app entrar no primeiro plano, e em [cold start](https://developers.google.com/admob/android/app-open#coldstart), ou seje, na
+primeira vez que o app entra. Esta é a maneira recomendada por quando.
+
+```kotlin
+class MainActivity : ComponentActivity(),
+    AdsInitializer by AdsInitializeFactory.admobInitializer(),
+    OpenAdSetup by AppOpenAdManagerFactory.admobAppOpenInitializer() // <-- for app open ads
+
+{
+
+
+    private var keepSplashScreen = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initializeAds(this)
+
+        val splash = installSplashScreen()
+        splash.setKeepOnScreenCondition {
+            keepSplashScreen
+        }
+        registerAppOpenAd(
+            AdMobTestIds.APP_OPEN,
+            this,
+            showOnColdStart = false,
+            closeSplashScreen = {
+                keepSplashScreen = false
+            })
+
+        setContent {
+            SampleJetAdsTheme {
+
+            }
+        }
+    }
+
+
+}
+```
+
+Sera preciso adicionar a api de [splashScreen](https://www.youtube.com/watch?v=abthd7DOfdw) ou alguma outra solucao de splash scren, pois mostrar o anuncio em cold start sem a 
+splash screen resulta em um atraso na exeibição do ad, o que pode incomodar o user. Vale dar uma lida nas [melhores praticas para app open ads](https://support.google.com/admob/answer/9341964)
+
 
 ### IDs para Testes
 
-A biblioteca fornece o objeto `AdMobTestIds` para acessar todos os IDs de [teste do AdMob](https://developers.google.com/admob/android/test-ads):
+A biblioteca fornece o objeto `AdMobTestIds` para acessar todos os IDs
+de [teste do AdMob](https://developers.google.com/admob/android/test-ads):
 
 ```kotlin
 object AdMobTestIds {
@@ -133,9 +207,14 @@ object AdMobTestIds {
 
 ## Contribuindo
 
-Contribuições de novas funcionalidades ou correções de bugs são sempre bem-vindas. Por favor, submeta uma nova issue ou pull request a qualquer momento.
+Contribuições de novas funcionalidades ou correções de bugs são sempre bem-vindas. Por favor,
+submeta uma nova issue ou pull request a qualquer momento.
 
 Ao contribuir, tenha em mente:
-- A filosofia da biblioteca é ser fácil de usar, sempre escondendo as implementações complexas dos usuários.
+
+- A filosofia da biblioteca é ser fácil de usar, sempre escondendo as implementações complexas dos
+  usuários.
 - Siga o princípio "Plug and Earn".
-- Tenha cuidado com memory leaks! O app de demonstração já inclui o LeakCanary; sempre verifique se sua alteração não provocou algum vazamento de memória.
+- Tenha cuidado com memory leaks! O app de demonstração já inclui o LeakCanary; sempre verifique se
+  sua alteração não provocou algum vazamento de memória. Precisa adicionar
+  o [leakCanary a pipeline](https://square.github.io/leakcanary/ui-tests/#leak-detection-in-ui-tests) 
