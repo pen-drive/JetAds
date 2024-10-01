@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(),
         splash.setKeepOnScreenCondition { keepSplashScreen }
 
 
-        registerOpenAppAd(AdMobTestIds.APP_OPEN, this, showOnColdStart = false) {
+        registerAppOpenAd(AdMobTestIds.APP_OPEN, this, showOnColdStart = false) {
             keepSplashScreen = false
         }
 

@@ -4,7 +4,7 @@ import androidx.activity.ComponentActivity
 import com.jet.ads.common.callbacks.ShowAdCallBack
 
 interface OpenAdSetup {
-    fun registerOpenAppAd(
+    fun registerAppOpenAd(
         adUnitId: String,
         activity: ComponentActivity,
         showOnColdStart: Boolean = false,
