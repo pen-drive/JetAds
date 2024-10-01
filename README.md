@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity(),
 
 ### <img src="docs/images/banner.svg" alt="Banner Ad" width="40" height="40" style="vertical-align: middle; margin-right: 10px;"/><span style="display: inline-block; vertical-align: middle; line-height: 40px;">Banner</span>
 
-Para adicionar um banner adaptativo:
+Para adicionar um banner adaptativo simplismnete coloque este composable onde voce quer mostralo:
 
 ```kotlin
 AdaptiveBanner("SEU_ID_DE_BANNER")
@@ -76,14 +76,23 @@ AdaptiveBanner("SEU_ID_DE_BANNER")
 
 Para posicionar o banner na parte inferior da tela:
 
-```kotlin
-Scaffold(
-    modifier = Modifier.fillMaxSize(),
-    bottomBar = { AdaptiveBanner(AdMobTestIds.ADAPTIVE_BANNER) }
-) { innerPadding ->
-    Greeting(name = "Android", modifier = Modifier.padding(innerPadding))
-}
-```
+
+> [!TIP]
+> Banner normalmente são posicionados na parte infeeriro da tela, para fazer isso voce pode: 
+> ```kotlin
+>   Scaffold(
+>     modifier = Modifier.fillMaxSize(),
+>     bottomBar = { AdaptiveBanner(AdMobTestIds.ADAPTIVE_BANNER) }) { innerPadding ->
+>     //content
+>     }
+> ```
+>
+
+
+
+
+
+
 
 ### <img src="docs/images/interstitial.svg" alt="Interstitial Ad" width="40" height="40" style="vertical-align: middle; margin-right: 10px;"/><span style="display: inline-block; vertical-align: middle; line-height: 40px;">Interstitials</span>
 
@@ -139,9 +148,7 @@ class MainActivity : ComponentActivity(),
         registerAppOpenAd(AdMobTestIds.APP_OPEN, this)  // <-- for app open ads
 
         setContent {
-            SampleJetAdsTheme {
-                //content
-            }
+            //Compose content
         }
     }
 
@@ -179,9 +186,7 @@ class MainActivity : ComponentActivity(),
             })  // <-- for app open ads
 
         setContent {
-            SampleJetAdsTheme {
-
-            }
+            //Compose content
         }
     }
 
