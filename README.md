@@ -17,7 +17,7 @@ Easily integrate and manage ads in your Jetpack Compose apps with a library that
 The easiest way to start using JetAds is to add it as a Gradle dependency in your app module's `build.gradle` file.
 
 ```kotlin
-implementation("io.github.pen-drive:jet-ads:1.0.1")
+implementation("io.github.pen-drive:jet-ads:1.0.2")
 ```
 
 > [!TIP]
