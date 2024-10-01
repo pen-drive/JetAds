@@ -10,12 +10,7 @@
 Easily integrate and manage ads in your Jetpack Compose apps with a library that simplifies AdMob implementation. It’s like 'Plug and Earn!'
 
 > [!CAUTION]
-> The **Show on [cold start](https://developers.google.com/admob/android/app-open#coldstart)** feature was specifically designed to work **only** with the [SplashScreen API](https://www.youtube.com/watch?v=abthd7DOfdw).
-> Using a splash screen as a regular activity may not function as expected.
->
-> Note: This behavior may change in future versions.
-
-
+> If you're not using test IDs, remember to add your device/emulator as a [test device](https://developers.google.com/admob/android/test-ads#enable_test_devices).
 
 ## Installation
 
@@ -172,10 +167,13 @@ class MainActivity : ComponentActivity(),
     }
 }
 ```
+> [!CAUTION]
+> The **Show on [cold start](https://developers.google.com/admob/android/app-open#coldstart)** feature was specifically designed to work **only** with the [SplashScreen API](https://www.youtube.com/watch?v=abthd7DOfdw).
+> Using a splash screen as a regular activity may not function as expected.
+>
+> Note: This behavior may change in future versions.
 
 
-
-You'll need to add the [splashScreen API](https://www.youtube.com/watch?v=abthd7DOfdw), as showing the ad on cold start without a splash screen results in a delay in ad display, which may annoy the user. It's worth reading the [best practices for app open ads](https://support.google.com/admob/answer/9341964)
 
 ## Test IDs
 
