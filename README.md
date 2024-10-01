@@ -120,7 +120,9 @@ Maneira para mostrar ads sempre que o app entrar no primeiro plano
 
 ```kotlin
 class MainActivity : ComponentActivity(),
-    AdsInitializer by AdsInitializeFactory.admobInitializer() {
+    AdsInitializer by AdsInitializeFactory.admobInitializer(),
+    OpenAdSetup by AppOpenAdManagerFactory.admobAppOpenInitializer() // <-- for app open ads
+{
 
 
     private var keepSplashScreen = true
@@ -129,7 +131,7 @@ class MainActivity : ComponentActivity(),
         super.onCreate(savedInstanceState)
         initializeAds(this)
 
-        registerAppOpenAd(AdMobTestIds.APP_OPEN, this)
+        registerAppOpenAd(AdMobTestIds.APP_OPEN, this)  // <-- for app open ads
 
         setContent {
             SampleJetAdsTheme {
@@ -163,13 +165,13 @@ class MainActivity : ComponentActivity(),
         splash.setKeepOnScreenCondition {
             keepSplashScreen
         }
-        registerAppOpenAd(
-            AdMobTestIds.APP_OPEN,
-            this,
-            showOnColdStart = false,
+      
+        registerAppOpenAd(AdMobTestIds.APP_OPEN,
+          this,
+          showOnColdStart = false,
             closeSplashScreen = {
                 keepSplashScreen = false
-            })
+            })  // <-- for app open ads
 
         setContent {
             SampleJetAdsTheme {
