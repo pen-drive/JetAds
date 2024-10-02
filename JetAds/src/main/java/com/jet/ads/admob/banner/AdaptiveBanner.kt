@@ -46,7 +46,7 @@ fun AdaptiveBanner(
     adUnit: String,
     modifier: Modifier = Modifier,
     safeTopMarginDp: Dp = 12.dp,
-    safeAreaColor: Color = MaterialTheme.colors.background,
+    safeAreaColor: Color = Color.Transparent,
     bannerCallBack: BannerCallBack? = null
 ) {
     val currentWidth = LocalConfiguration.current.screenWidthDp
