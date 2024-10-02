@@ -25,8 +25,6 @@ internal abstract class BaseAdPool<T : Any> : AdPool<T> {
 
     override fun saveAd(adUnitId: String, ad: T) {
         ads[adUnitId] = Pair(ad, SystemClock.elapsedRealtime())
-        Log.d("AAA", "saveAd ads = ${ads.toList()}")
-
         emitAds()
     }
 
