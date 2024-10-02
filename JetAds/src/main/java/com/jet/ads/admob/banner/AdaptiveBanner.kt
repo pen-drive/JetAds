@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -45,7 +46,7 @@ fun AdaptiveBanner(
     adUnit: String,
     modifier: Modifier = Modifier,
     safeTopMarginDp: Dp = 12.dp,
-    safeAreaColor: Color = Color.White,
+    safeAreaColor: Color = MaterialTheme.colors.background,
     bannerCallBack: BannerCallBack? = null
 ) {
     val currentWidth = LocalConfiguration.current.screenWidthDp
