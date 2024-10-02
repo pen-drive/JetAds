@@ -18,7 +18,6 @@ class AdmobInterstitialProvider : AdProvider<InterstitialAd, InterstitialShowAdC
         onAdLoaded: (InterstitialAd) -> Unit,
         onAdFailedToLoad: (LoadAdError) -> Unit
     ) {
-
         InterstitialAd.load(
             context,
             adUnitId,

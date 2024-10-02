@@ -3,6 +3,7 @@ package com.jet.ads.utils.pools
 import android.os.SystemClock
 import android.util.Log
 import androidx.annotation.VisibleForTesting
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.rewarded.RewardedAd
@@ -75,3 +76,10 @@ internal object AppOpenAdmobPool : BaseAdPool<AppOpenAd>() {
     }
 }
 
+
+internal object BannerAdmobPool : BaseAdPool<AdView>() {
+    override fun clearCallback(ad: AdView?) {
+
+    }
+
+}
