@@ -104,7 +104,7 @@ LoadRewarded("YOUR_REWARDED_ID")
 To show the Rewarded:
 
 ```kotlin
- val rewardsController: RewardsController = RewardedControllerFactory.admobController()
+val rewardsController: RewardsController = RewardedControllerFactory.admobController()
 rewardsController.show("PREVIOUSLY_LOADED_REWARDED_ID", activity) { rewardedItem ->
     // Logic to handle the reward
 }
@@ -191,6 +191,10 @@ object AdMobTestIds {
   const val NATIVE_VIDEO = "ca-app-pub-3940256099942544/1044960115"
 }
 ```
+
+> [!TIP]
+> Take a look at the app module in this repository; there you can see more advanced ways to use this library.
+
 
 ## Upcoming features (possibly)
 
