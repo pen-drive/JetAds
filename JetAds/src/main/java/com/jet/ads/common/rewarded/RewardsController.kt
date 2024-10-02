@@ -7,7 +7,7 @@ import com.jet.ads.common.callbacks.ShowAdCallBack
 import kotlinx.coroutines.flow.Flow
 
 
-interface Rewarded {
+interface RewardsController {
     fun loadedAds(): Flow<List<Pair<String, Pair<RewardedAd, Long>>>>
     fun show(
         adUnitId: String,

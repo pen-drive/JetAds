@@ -89,8 +89,8 @@ LoadInterstitial("YOUR_INTERSTITIAL_ID")
 To show the Interstitial:
 
 ```kotlin
-val interstitials: Interstitials = InterstitialsFactory.admobInterstitial()
-interstitials.show("PREVIOUSLY_LOADED_INTERSTITIAL_ID", activityContext)
+val interstitialsController: InterstitialsController = InterstitialsControllerFactory.admobController()
+interstitialsController.show("PREVIOUSLY_LOADED_INTERSTITIAL_ID", activityContext)
 ```
 
 ### <img src="docs/images/rewarded.svg" alt="Rewarded Ad" width="64" height="64" style="vertical-align: middle; margin-right: 10px;"/><span style="display: inline-block; vertical-align: middle; line-height: 64px;">Rewardeds</span>
@@ -104,8 +104,8 @@ LoadRewarded("YOUR_REWARDED_ID")
 To show the Rewarded:
 
 ```kotlin
-val rewarded: Rewarded = RewardedFactory.admobRewarded()
-rewarded.show("PREVIOUSLY_LOADED_REWARDED_ID", activity) { rewardedItem ->
+ val rewardsController: RewardsController = RewardedControllerFactory.admobController()
+rewardsController.show("PREVIOUSLY_LOADED_REWARDED_ID", activity) { rewardedItem ->
     // Logic to handle the reward
 }
 ```
