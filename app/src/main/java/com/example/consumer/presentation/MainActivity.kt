@@ -25,22 +25,17 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         val splash = installSplashScreen()
 
-
         initializeAds(this, adsControl = adsControl)
-
-
         splash.setKeepOnScreenCondition { keepSplashScreen }
-
-
         registerAppOpenAd(AdMobTestIds.APP_OPEN, this, showOnColdStart = false) {
             keepSplashScreen = false
+
         }
 
         setContent {
             val viewModel: MainViewModel = viewModel()
             MainScreen(viewModel = viewModel)
         }
-
     }
 }
 

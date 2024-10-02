@@ -52,6 +52,8 @@ class AdaptiveBannerTest {
 
         composeTestRule.onNodeWithTag("AdView").assertExists()
 
+
+
     }
 
     @Test

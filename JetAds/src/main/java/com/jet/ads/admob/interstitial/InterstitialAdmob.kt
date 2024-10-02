@@ -3,7 +3,7 @@ package com.jet.ads.admob.interstitial
 import android.app.Activity
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.jet.ads.common.interstitial.Interstitials
+import com.jet.ads.common.interstitial.InterstitialsController
 import com.jet.ads.common.callbacks.ShowAdCallBack
 import com.jet.ads.common.callbacks.InterstitialShowAdCallbacks
 import com.jet.ads.utils.pools.AdMobInterstitialPool
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 internal class InterstitialAdmob(
     private val interstitialAdmobManager: InterstitialAdManager = InterstitialAdManager(),
     private val adMobInterstitialPool: AdMobInterstitialPool = AdMobInterstitialPool,
-) : Interstitials {
+) : InterstitialsController {
 
 
     override fun loadedAds(): Flow<List<Pair<String, Pair<InterstitialAd, Long>>>> {

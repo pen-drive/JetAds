@@ -4,7 +4,7 @@ import android.app.Activity
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
-import com.jet.ads.common.rewarded.Rewarded
+import com.jet.ads.common.rewarded.RewardsController
 import com.jet.ads.common.callbacks.ShowAdCallBack
 import com.jet.ads.common.callbacks.FullRewardedShowAdCallbacks
 import com.jet.ads.common.callbacks.OnlyOnRewardedCallback
@@ -12,10 +12,10 @@ import com.jet.ads.utils.pools.AdMobRewardedPool
 import kotlinx.coroutines.flow.Flow
 
 
-internal class RewardedAdmob(
+internal class RewardsControllerAdmob(
     private val rewardedAdmobManager: RewardedAdManager = RewardedAdManager(),
     private val adMobRewardedPool: AdMobRewardedPool = AdMobRewardedPool,
-) : Rewarded {
+) : RewardsController {
 
     override fun loadedAds(): Flow<List<Pair<String, Pair<RewardedAd, Long>>>> {
         return adMobRewardedPool.getAllAds()

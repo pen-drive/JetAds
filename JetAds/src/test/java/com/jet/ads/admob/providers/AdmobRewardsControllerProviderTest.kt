@@ -17,7 +17,7 @@ import io.mockk.*
 import org.junit.Before
 import org.junit.Test
 
-class AdmobRewardedProviderTest {
+class AdmobRewardsControllerProviderTest {
 
     private lateinit var mockContext: Context
     private lateinit var mockActivity: Activity

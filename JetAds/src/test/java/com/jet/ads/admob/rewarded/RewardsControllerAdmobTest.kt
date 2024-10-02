@@ -18,9 +18,9 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 
-class RewardedAdmobTest {
+class RewardsControllerAdmobTest {
 
-    private lateinit var rewardedAdmob: RewardedAdmob
+    private lateinit var rewardedAdmob: RewardsControllerAdmob
     private lateinit var mockRewardedAdManager: RewardedAdManager
     private lateinit var mockAdMobRewardedPool: AdMobRewardedPool
 
@@ -28,7 +28,7 @@ class RewardedAdmobTest {
     fun setup() {
         mockRewardedAdManager = mockk(relaxed = true)
         mockAdMobRewardedPool = mockk(relaxed = true)
-        rewardedAdmob = RewardedAdmob(mockRewardedAdManager, mockAdMobRewardedPool)
+        rewardedAdmob = RewardsControllerAdmob(mockRewardedAdManager, mockAdMobRewardedPool)
     }
 
     @Test

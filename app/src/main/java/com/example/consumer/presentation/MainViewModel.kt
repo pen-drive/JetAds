@@ -5,11 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.rewarded.RewardedAd
-import com.jet.ads.common.interstitial.Interstitials
-import com.jet.ads.common.interstitial.InterstitialsFactory
-import com.jet.ads.common.rewarded.RewardedFactory
+import com.jet.ads.common.callbacks.ShowAdCallBack
+import com.jet.ads.common.interstitial.InterstitialsController
+import com.jet.ads.common.interstitial.InterstitialsControllerFactory
+import com.jet.ads.common.rewarded.RewardedControllerFactory
 import com.jet.ads.common.controller.JetAdsAdsControlImpl
-import com.jet.ads.common.rewarded.Rewarded
+import com.jet.ads.common.rewarded.RewardsController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -28,19 +29,19 @@ class MainViewModel : ViewModel() {
     val rewardedLoaded = _rewardedLoaded.asStateFlow()
 
 
-    private val interstitials: Interstitials = InterstitialsFactory.admobInterstitial()
-    private val rewarded: Rewarded = RewardedFactory.admobRewarded()
+    private val interstitialsController: InterstitialsController = InterstitialsControllerFactory.admobController()
+    private val rewardsController: RewardsController = RewardedControllerFactory.admobController()
 
     init {
         viewModelScope.launch {
 
             launch {
-                interstitials.loadedAds().collect { list ->
+                interstitialsController.loadedAds().collect { list ->
                     _interstitialsLoaded.value = list
                 }
             }
             launch {
-                rewarded.loadedAds().collect { list ->
+                rewardsController.loadedAds().collect { list ->
                     _rewardedLoaded.value = list
                 }
             }
@@ -66,13 +67,32 @@ class MainViewModel : ViewModel() {
     fun onEvent(event: MainScreenEvents) {
         when (event) {
             is MainScreenEvents.RewardedInterstitial -> {
-                rewarded.show(event.adId, event.activity, onRewarded = { rewardedItem ->
-
+                rewardsController.show(event.adId, event.activity,
+                    ShowAdCallBack( //<-- you can use callbacks
+                    onAdClicked = {
+                        // handle onAdClicked
+                    },
+                    onAdDismissed = {},
+                    onAdFailedToShow = {},
+//                    onAdImpression = {},
+                    onAdShowed = {}
+                ),
+                onRewarded = { rewardedItem ->
+                    // handle onRewarded
                 })
             }
 
             is MainScreenEvents.ShowInterstitial -> {
-                interstitials.show(event.adId, event.activity)
+                interstitialsController.show(event.adId, event.activity,
+                    callback = ShowAdCallBack( //<-- you can use callbacks
+                    onAdClicked = {
+                        // handle onAdClicked
+                    },
+                    onAdDismissed = {},
+                    onAdFailedToShow = {},
+//                    onAdImpression = {},
+                    onAdShowed = {}
+                ))
             }
 
             MainScreenEvents.ToggleAds -> {
