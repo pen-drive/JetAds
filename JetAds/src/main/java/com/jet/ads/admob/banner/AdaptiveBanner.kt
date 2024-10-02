@@ -43,6 +43,7 @@ import com.jet.ads.common.controller.ControlProvider
 @Composable
 fun AdaptiveBanner(
     adUnit: String,
+    modifier: Modifier = Modifier,
     safeTopMarginDp: Dp = 12.dp,
     safeAreaColor: Color = Color.White,
     bannerCallBack: BannerCallBack? = null
@@ -60,27 +61,34 @@ fun AdaptiveBanner(
     LaunchedEffect(isAdsEnable, currentWidth) {
         if (isAdsEnable && !isPreviewMode) {
             adView?.destroy()
-            adView = loadAdaptiveBannerAd2(adUnit, appContext, currentWidth, isPreviewMode, bannerCallBack)
+            adView = loadAdaptiveBannerAd2(
+                adUnit, appContext, currentWidth, isPreviewMode, bannerCallBack
+            )
         } else {
             adView?.destroy()
             adView = null
         }
     }
 
-    if (isAdsEnable){
+    if (isAdsEnable) {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .background(safeAreaColor)
                 .heightIn(80.dp)
         ) {
-            Spacer(modifier = Modifier.height(safeTopMarginDp).testTag("SafeTopMargin"))
+            Spacer(
+                modifier = Modifier
+                    .height(safeTopMarginDp)
+                    .testTag("SafeTopMargin")
+            )
 
             Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxWidth()) {
                 if (!isPreviewMode) {
                     adView?.let { adv ->
-                        AndroidView(
-                            modifier = Modifier.fillMaxWidth().testTag("AdView"),
+                        AndroidView(modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("AdView"),
                             factory = { FrameLayout(it) },
                             update = { layout ->
                                 layout.removeAllViews()
@@ -88,8 +96,7 @@ fun AdaptiveBanner(
                                     (adv.parent as? ViewGroup)?.removeView(adv)
                                 }
                                 layout.addView(adv)
-                            }
-                        )
+                            })
                     }
                 } else {
                     BannerPreview()

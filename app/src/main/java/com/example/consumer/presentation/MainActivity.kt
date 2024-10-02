@@ -34,13 +34,13 @@ class MainActivity : AppCompatActivity(),
 
         registerAppOpenAd(AdMobTestIds.APP_OPEN, this, showOnColdStart = false) {
             keepSplashScreen = false
+
         }
 
         setContent {
             val viewModel: MainViewModel = viewModel()
             MainScreen(viewModel = viewModel)
         }
-
     }
 }
 
