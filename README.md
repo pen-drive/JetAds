@@ -156,7 +156,7 @@ class MainActivity : ComponentActivity(),
       
         registerAppOpenAd(AdMobTestIds.APP_OPEN,
           this,
-          showOnColdStart = false,
+          showOnColdStart = true,
             closeSplashScreen = {
                 keepSplashScreen = false
             })  // <-- for app open ads

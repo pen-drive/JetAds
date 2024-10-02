@@ -85,6 +85,7 @@ fun AdaptiveBanner(
             )
 
             Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxWidth()) {
+
                 if (!isPreviewMode) {
                     adView?.let { adv ->
                         AndroidView(modifier = Modifier

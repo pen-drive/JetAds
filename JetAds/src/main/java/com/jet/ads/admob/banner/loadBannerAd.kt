@@ -35,6 +35,8 @@ internal fun loadAdaptiveBannerAd2(
 }
 
 internal fun handleCallBacks(showAdCallBack: BannerCallBack?, adView: AdView) {
+
+
     showAdCallBack?.let { callback ->
         adView.adListener = object : AdListener() {
             override fun onAdLoaded() {
