@@ -47,12 +47,11 @@ internal abstract class BaseAdPool<T : Any> : AdPool<T> {
         emitAds()
     }
 
-
-
     abstract fun clearCallback(ad: T?)
 
     private fun emitAds() {
         _adsFlow.value = ads.toList()
+
     }
 }
 
