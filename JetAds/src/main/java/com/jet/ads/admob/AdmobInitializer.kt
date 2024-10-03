@@ -42,12 +42,13 @@ internal class AdmobInitializer(
     override fun initializeAds(
         context: ComponentActivity, backgroundScope: CoroutineScope, adsControl: AdsControl
     ): Flow<Boolean> {
+        controlLocator.setAdControl(adsControl)
+
         if (!adsControl.areAdsEnabled().value) return MutableStateFlow(true)
 
         this.backgroundScope = backgroundScope
         this.activityRef = WeakReference(context)
 
-        controlLocator.setAdControl(adsControl)
         context.lifecycle.addObserver(this)
 
         return adsInitializationStatus
@@ -61,8 +62,6 @@ internal class AdmobInitializer(
         handleSdkInitialization(event, activity)
         clearLibToAvoidMemoryLeak(event, activity)
     }
-
-
 
 
 
