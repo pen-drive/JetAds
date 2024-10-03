@@ -65,8 +65,6 @@ internal class AdmobInitializer(
 
 
 
-
-
     private fun handleSdkInitialization(event: Lifecycle.Event, activity: ComponentActivity) {
         if (event == Lifecycle.Event.ON_CREATE) {
             backgroundScope.launch {
