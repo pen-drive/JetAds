@@ -55,6 +55,28 @@ class AdmobInitializerTest {
         )
     }
 
+
+    @Test
+    fun `initializeAds should set custom ad control immediately in initialization even ads are enable`() = runTest {
+        every { adsControl.areAdsEnabled() } returns MutableStateFlow(true)
+
+         admobInitializer.initializeAds(activity, this, adsControl)
+
+        verify { controlProvider.setAdControl(any()) }
+    }
+
+    @Test
+    fun `initializeAds should set custom ad control immediately in initialization even ads are disabled`() = runTest {
+        every { adsControl.areAdsEnabled() } returns MutableStateFlow(false)
+
+        val result = admobInitializer.initializeAds(activity, this, adsControl)
+
+        verify { adsControl.areAdsEnabled() }
+        verify { controlProvider.setAdControl(any()) }
+        assertThat(result.first()).isTrue()
+    }
+
+
     @Test
     fun `initializeAds should return true immediately when ads are disabled`() = runTest {
         every { adsControl.areAdsEnabled() } returns MutableStateFlow(false)
