@@ -35,7 +35,7 @@ jobs:
       - name: Start Emulator
         uses: ReactiveCircus/android-emulator-runner@v2.32.0
         with:
-          api-level: 34
+          api-level: 26
           target: google_apis
           arch: arm64-v8a
           profile: Nexus 6P
