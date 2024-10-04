@@ -158,7 +158,6 @@ class AdPoolImplementationsTest {
     }
 
 
-
     @Test
     fun `AdMobInterstitialPool emits updated ads after operations`() = runTest {
         val mockAd1 = mockk<InterstitialAd>(relaxed = true)
@@ -193,6 +192,7 @@ class AdPoolImplementationsTest {
         val mockAd1 = mockk<RewardedAd>(relaxed = true)
         val mockAd2 = mockk<RewardedAd>(relaxed = true)
 
+        AdMobRewardedPool.clearPool()
 
         AdMobRewardedPool.getAllAds().test {
 
