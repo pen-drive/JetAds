@@ -44,7 +44,8 @@ After adding the library, add the following meta-data to your `AndroidManifest.x
 
 ```kotlin
 class MainActivity : ComponentActivity(),
-    AdsInitializer by AdsInitializeFactory.admobInitializer() {
+    AdsInitializer by AdsInitializeFactory.admobInitializer() // <- use delegation ,
+{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +53,7 @@ class MainActivity : ComponentActivity(),
         initializeAds(this) // Initialize the ads
 
         setContent {
-            Greeting(name = "Android")
+            //Compose content
         }
     }
 }
@@ -74,7 +75,7 @@ To position the banner at the bottom of the screen:
 >   Scaffold(
 >     modifier = Modifier.fillMaxSize(),
 >     bottomBar = { AdaptiveBanner(AdMobTestIds.ADAPTIVE_BANNER) }) { innerPadding ->
->     //content
+>         //Compose content
 >     }
 > ```
 
@@ -209,4 +210,3 @@ When contributing, keep in mind:
 
 - The library's philosophy is to be easy to use, always hiding complex implementations from users.
 - Contributors must follow the 'Plug and Earn' principle, ensuring that this library remains simple and easy to use for developers.
-- Be careful with memory leaks! The demo app already includes LeakCanary; always check if your change hasn't caused any memory leaks. You need to add [LeakCanary to the pipeline](https://square.github.io/leakcanary/ui-tests/#leak-detection-in-ui-tests).
