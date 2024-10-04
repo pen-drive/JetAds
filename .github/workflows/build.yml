@@ -37,10 +37,19 @@ jobs:
         with:
           api-level: 34
           target: google_apis
-          disable-linux-hw-accel: true
-          arch: x86_64
+          arch: arm64-v8a
           profile: Nexus 6P
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           script: ./gradlew :app:connectedAndroidTest --info
+          disable-linux-hw-accel: true
+
+      - name: Wait for Emulator to be Ready
+        run: |
+          adb wait-for-device
+          adb shell getprop sys.boot_completed | grep -m 1 '1'
+
+      - name: Run Instrumented Tests
+        run: ./gradlew :app:connectedAndroidTest --info
 
       - name: Publish to Maven Central
         env:
