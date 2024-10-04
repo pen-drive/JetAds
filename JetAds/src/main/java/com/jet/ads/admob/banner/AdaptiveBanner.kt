@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -31,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.ads.AdView
 import com.jet.ads.common.callbacks.BannerCallBack
 import com.jet.ads.common.controller.ControlProvider
+
 
 /**
  * Displays a banner ad with measures to minimize accidental clicks.
@@ -109,6 +109,11 @@ fun AdaptiveBanner(
 
     DisposableEffect(Unit) {
         onDispose {
+            val parent = adView?.parent
+            if (parent != null && parent is ViewGroup) {
+                parent.removeView(adView)
+            }
+
             adView?.destroy()
             adView = null
         }
