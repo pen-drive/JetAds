@@ -15,6 +15,7 @@ import com.example.consumer.R
 @Composable
 fun SwitchAds(isAdsEnable: Boolean, toggleAds: () -> Unit) {
 
+
     Row(verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -27,4 +28,6 @@ fun SwitchAds(isAdsEnable: Boolean, toggleAds: () -> Unit) {
             toggleAds()
         })
     }
+
+
 }
