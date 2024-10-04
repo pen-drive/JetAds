@@ -34,8 +34,6 @@ jobs:
 
       - name: Start Emulator
         uses: ReactiveCircus/android-emulator-runner@v2
-
-
         with:
           api-level: 34
           target: google_apis
