@@ -33,7 +33,7 @@ jobs:
         run: ./gradlew :JetAds:build --warning-mode all
 
       - name: Start Emulator
-        uses: ReactiveCircus/android-emulator-runner@v2
+        uses: ReactiveCircus/android-emulator-runner@v2.32.0
         with:
           api-level: 34
           target: google_apis
@@ -42,14 +42,6 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           script: ./gradlew :app:connectedAndroidTest --info
           disable-linux-hw-accel: true
-
-      - name: Wait for Emulator to be Ready
-        run: |
-          adb wait-for-device
-          adb shell getprop sys.boot_completed | grep -m 1 '1'
-
-      - name: Run Instrumented Tests
-        run: ./gradlew :app:connectedAndroidTest --info
 
       - name: Publish to Maven Central
         env:
