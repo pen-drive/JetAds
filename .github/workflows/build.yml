@@ -32,6 +32,20 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew :JetAds:build --warning-mode all
 
+      - name: Start Emulator
+        uses: ReactiveCircus/android-emulator-runner@v2.32.0
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: Nexus 6P
+
+      - name: Wait for Emulator to be Ready
+        run: adb wait-for-device
+
+      - name: Run Instrumented Tests
+        run: ./gradlew :app:connectedAndroidTest --info
+
       - name: Publish to Maven Central
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
