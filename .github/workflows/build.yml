@@ -34,11 +34,12 @@ jobs:
 
       - name: Start Emulator
         uses: ReactiveCircus/android-emulator-runner@v2
-        with:
-          disable-linux-hw-accel: true
+
+
         with:
           api-level: 34
           target: google_apis
+          disable-linux-hw-accel: true
           arch: x86_64
           profile: Nexus 6P
           script: ./gradlew :app:connectedAndroidTest --info
