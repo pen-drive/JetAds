@@ -77,7 +77,7 @@ internal object AppOpenAdmobPool : BaseAdPool<AppOpenAd>() {
 }
 
 
-internal object BannerAdmobPool : BaseAdPool<AdView>() {
+internal object AdMobBannerAdmobPool : BaseAdPool<AdView>() {
     override fun clearCallback(ad: AdView?) {
 
     }
