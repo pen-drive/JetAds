@@ -1,4 +1,4 @@
-package com.jet.ads.admob.banner
+package com.jet.ads.admob.banner.pre_load_banner
 
 import android.app.Activity
 import androidx.compose.runtime.Composable
@@ -6,8 +6,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import com.jet.ads.admob.banner.pre_load_banner.BannerManager
-import com.jet.ads.admob.banner.pre_load_banner.BannerSizes
 import com.jet.ads.utils.BannerManagerFactory
 
 

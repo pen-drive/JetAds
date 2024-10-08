@@ -51,6 +51,7 @@ class AdmobBannerProvider<TAd, TCallbacks>(
             BannerSizes.MEDIUM_RECTANGLE -> adView.setAdSize(AdSize.MEDIUM_RECTANGLE)
             BannerSizes.FULL_BANNER -> adView.setAdSize(AdSize.FULL_BANNER)
             BannerSizes.LEADERBOARD -> adView.setAdSize(AdSize.LEADERBOARD)
+            BannerSizes.ANCHORED_ADAPTIVE_BANNER -> TODO()
         }
 
         adView.loadAd(AdRequest.Builder().build())
