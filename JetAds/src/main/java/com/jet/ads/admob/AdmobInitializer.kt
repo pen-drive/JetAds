@@ -17,6 +17,7 @@ import com.jet.ads.common.controller.ControlProvider
 import com.jet.ads.utils.pools.AdPool
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,14 +32,16 @@ internal class AdmobInitializer(
     private val adMobRewardedPool: AdPool<RewardedAd>,
     private val adMobInterstitialPool: AdPool<InterstitialAd>,
     private val adMobAppOpenPool: AdPool<AppOpenAd>,
+    private val backgroundScope: CoroutineScope = CoroutineScope(Dispatchers.IO),
 ) : AdsInitializer, LifecycleEventObserver {
 
     private val _adsInitializationStatus = MutableStateFlow(false)
     private val adsInitializationStatus = _adsInitializationStatus.asStateFlow()
 
-    private lateinit var backgroundScope: CoroutineScope
+
     private var activityRef: WeakReference<ComponentActivity>? = null
 
+    @Deprecated("this method is deprecated")
     override fun initializeAds(
         context: ComponentActivity, backgroundScope: CoroutineScope, adsControl: AdsControl
     ): Flow<Boolean> {
@@ -46,7 +49,6 @@ internal class AdmobInitializer(
 
         if (!adsControl.areAdsEnabled().value) return MutableStateFlow(true)
 
-        this.backgroundScope = backgroundScope
         this.activityRef = WeakReference(context)
 
         context.lifecycle.addObserver(this)
@@ -54,6 +56,18 @@ internal class AdmobInitializer(
         return adsInitializationStatus
     }
 
+    override fun ComponentActivity.initializeAds(adsControl: AdsControl): Flow<Boolean> {
+        controlLocator.setAdControl(adsControl)
+
+        if (!adsControl.areAdsEnabled().value) return MutableStateFlow(true)
+
+
+        this@AdmobInitializer.activityRef = WeakReference(this)
+
+        this.lifecycle.addObserver(this@AdmobInitializer)
+
+        return adsInitializationStatus
+    }
 
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
@@ -62,7 +76,6 @@ internal class AdmobInitializer(
         handleSdkInitialization(event, activity)
         clearLibToAvoidMemoryLeak(event, activity)
     }
-
 
 
     private fun handleSdkInitialization(event: Lifecycle.Event, activity: ComponentActivity) {

@@ -18,14 +18,14 @@ class MainActivity : AppCompatActivity(),
     OpenAdSetup by AppOpenAdManagerFactory.admobAppOpenInitializer()
 {
 
-    private val adsControl = JetAdsAdsControlImpl
     private var keepSplashScreen = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val splash = installSplashScreen()
 
-        initializeAds(this, adsControl = adsControl)
+        initializeAds()
+
         splash.setKeepOnScreenCondition { keepSplashScreen }
         registerAppOpenAd(AdMobTestIds.APP_OPEN, this, showOnColdStart = false) {
             keepSplashScreen = false
