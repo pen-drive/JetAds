@@ -1,6 +1,7 @@
 package com.jet.ads.common.callbacks
 
 import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.rewarded.RewardItem
 
@@ -35,6 +36,15 @@ interface OnlyOnRewardedCallback : RewardedCallBack {}
 
 data class BannerCallBack(
     val onAdLoaded: () -> Unit = {},
+    val onAdFailedToLoad: (error: LoadAdError) -> Unit = {},
+    val onAdImpression: () -> Unit = {},
+    val onAdClicked: () -> Unit = {},
+)
+
+
+
+data class BannersCallBack(
+    val onAdLoaded: (AdView) -> Unit = {},
     val onAdFailedToLoad: (error: LoadAdError) -> Unit = {},
     val onAdImpression: () -> Unit = {},
     val onAdClicked: () -> Unit = {},

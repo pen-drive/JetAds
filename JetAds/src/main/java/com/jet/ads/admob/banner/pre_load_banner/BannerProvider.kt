@@ -13,7 +13,7 @@ interface BannerProvider<TAd, TCallbacks> {
         onAdFailedToLoad: (LoadAdError) -> Unit
     )
 
-    fun show(
+    fun getAd(
         adUnitId: String,
         adPair: Pair<TAd?, Long>,
         activity: Activity,

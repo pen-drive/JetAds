@@ -31,6 +31,18 @@ class AdmobBannerProvider<TAd, TCallbacks>(
                 onAdLoaded(adView)
             }
 
+            override fun onAdClosed() {
+                super.onAdClosed()
+            }
+
+            override fun onAdOpened() {
+                super.onAdOpened()
+            }
+
+            override fun onAdSwipeGestureClicked() {
+                super.onAdSwipeGestureClicked()
+            }
+
             override fun onAdFailedToLoad(error: LoadAdError) {
 
             }
@@ -57,7 +69,7 @@ class AdmobBannerProvider<TAd, TCallbacks>(
         adView.loadAd(AdRequest.Builder().build())
     }
 
-    override fun show(
+    override fun getAd(
         adUnitId: String,
         adPair: Pair<AdView?, Long>,
         activity: Activity,

@@ -2,6 +2,7 @@ package com.jet.ads.admob.banner.pre_load_banner
 
 import android.app.Activity
 import android.content.Context
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import com.jet.ads.utils.AdNotAvailableException
 import com.jet.ads.utils.AdProvider
@@ -50,14 +51,10 @@ internal abstract class BaseBannerAdManager<TAd, TCallbacks>(
         })
     }
 
-    fun showAd(
-        adUnitId: String, activity: Activity, callbacks: TCallbacks? = null
-    ) {
 
-
+    fun getAd(adUnitId: String,): TAd?{
+        return adPool.getAd(adUnitId)?.first
     }
-
-
 }
 
 
