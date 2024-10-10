@@ -14,6 +14,7 @@ import com.jet.ads.di.JetAdsLib
 import com.jet.ads.common.initializers.AdsInitializer
 import com.jet.ads.common.controller.AdsControl
 import com.jet.ads.common.controller.ControlProvider
+import com.jet.ads.common.controller.JetAdsControl
 import com.jet.ads.logging.ILogger
 import com.jet.ads.logging.Logger
 import com.jet.ads.utils.pools.AdPool
@@ -52,7 +53,7 @@ internal class AdmobInitializer(
         return adsInitializationStatus
     }
 
-    override fun ComponentActivity.initializeAds(adsControl: AdsControl): Flow<Boolean> {
+    override fun ComponentActivity.initializeAds(adsControl: JetAdsControl): Flow<Boolean> {
         setupAdsInitialization(this, adsControl)
         return adsInitializationStatus
     }

@@ -26,7 +26,7 @@ interface AppOpenAdManager {
 
     /**
      * Registers the activity to show App Open Ads when the app moves to the background and comes back to the foreground.
-     * If you also want to show the ad during a cold start, use the method: registerAppOpenAdOnColdStart.
+     * If you also want to show the ad during a cold start, use the method: registerAppOpenAdForColdStart.
      *
      * @param adUnitId The ID of the ad unit.
      * @param showAdsCallbacks Optional callbacks for ad events.
@@ -44,7 +44,7 @@ interface AppOpenAdManager {
      * @param showAdsCallbacks Optional callbacks for ad events.
      * @param onCloseSplashScreen callback to close the splash screen after the ad is shown, or failed to show.
      */
-    fun ComponentActivity.registerAppOpenAdOnColdStart(
+    fun ComponentActivity.registerAppOpenAdForColdStart(
         adUnitId: String, showAdsCallbacks: ShowAdCallBack? = null, onCloseSplashScreen: () -> Unit
     )
 }

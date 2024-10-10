@@ -4,12 +4,14 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.work.Logger
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.LoadAdError
 import com.jet.ads.common.callbacks.OpenAppShowAdCallbacks
 import com.jet.ads.common.callbacks.ShowAdCallBack
 import com.jet.ads.common.controller.AdsControl
 import com.jet.ads.common.controller.ControlProvider
+import com.jet.ads.logging.ILogger
 import java.lang.ref.WeakReference
 
 
@@ -18,6 +20,7 @@ internal class AppOpenAdAdmobSetupWithExtensionFunc(
     private val appLifecycleManager: AppLifecycleManager,
     private var controlLocator: ControlProvider = ControlProvider,
     private var appOpenAdManager: AppOpenAdManager? = AppOpenAdManager(),
+    private var logger: ILogger = com.jet.ads.logging.Logger,
 ) : com.jet.ads.common.app_open.AppOpenAdManager, AppLifecycleCallback {
 
     private var adUnitId: String? = null
@@ -37,7 +40,7 @@ internal class AppOpenAdAdmobSetupWithExtensionFunc(
         registerAppOpenAdInternal(adUnitId, this, false, showAdsCallbacks, null)
     }
 
-    override fun ComponentActivity.registerAppOpenAdOnColdStart(
+    override fun ComponentActivity.registerAppOpenAdForColdStart(
         adUnitId: String,
         showAdsCallbacks: ShowAdCallBack?,
         onCloseSplashScreen: () -> Unit
@@ -126,23 +129,44 @@ internal class AppOpenAdAdmobSetupWithExtensionFunc(
         return object : OpenAppShowAdCallbacks {
             override fun onAdClicked() {
                 showAdsCallbacks?.onAdClicked?.invoke()
+                adUnitId?.let {
+                    logger.adClicked(it)
+                }
             }
 
             override fun onAdDismissed() {
                 safeCloseSplashScreen()
                 showAdsCallbacks?.onAdDismissed?.invoke()
+
+                adUnitId?.let {
+                    logger.adDisplayed(it)
+                }
+
             }
 
             override fun onAdFailedToShow(error: AdError) {
                 showAdsCallbacks?.onAdFailedToShow?.invoke()
+
+                adUnitId?.let {
+                    logger.adFailedToShow(it, error.message)
+                }
             }
 
             override fun onAdImpression() {
                 showAdsCallbacks?.onAdImpression?.invoke()
+
+                adUnitId?.let {
+                    logger.adImpressionRecorded(it)
+                }
             }
 
             override fun onAdShowed() {
                 showAdsCallbacks?.onAdShowed?.invoke()
+
+                adUnitId?.let {
+                    logger.adDisplayed(it)
+                }
+
             }
         }
     }

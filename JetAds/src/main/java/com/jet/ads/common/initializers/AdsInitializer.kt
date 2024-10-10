@@ -3,6 +3,7 @@ package com.jet.ads.common.initializers
 import androidx.activity.ComponentActivity
 import com.jet.ads.common.controller.AdsControl
 import com.jet.ads.common.controller.JetAdsAdsControlImpl
+import com.jet.ads.common.controller.JetAdsControl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -26,7 +27,7 @@ interface AdsInitializer {
 
 
     fun ComponentActivity.initializeAds(
-        adsControl: AdsControl = JetAdsAdsControlImpl,
+        adsControl: JetAdsControl = JetAdsAdsControlImpl,
     ): Flow<Boolean>
 
 

@@ -129,7 +129,7 @@ class AppOpenAdAdmobSetupWithExtensionFuncTest {
         val closeSplashScreen: () -> Unit = mockk(relaxed = true)
 
         with(appOpenAdAdmobSetupWithExtensionFunc) {
-            mockActivity.registerAppOpenAdOnColdStart(
+            mockActivity.registerAppOpenAdForColdStart(
                 adUnitId, mockShowAdCallBack, closeSplashScreen
             )
         }
@@ -149,7 +149,7 @@ class AppOpenAdAdmobSetupWithExtensionFuncTest {
         every { mockAppLifecycleManager.isFirstEntry() } returns false
 
         with(appOpenAdAdmobSetupWithExtensionFunc) {
-            mockActivity.registerAppOpenAdOnColdStart(
+            mockActivity.registerAppOpenAdForColdStart(
                 adUnitId, mockShowAdCallBack, closeSplashScreen
             )
         }
@@ -177,7 +177,7 @@ class AppOpenAdAdmobSetupWithExtensionFuncTest {
         }
 
         with(appOpenAdAdmobSetupWithExtensionFunc) {
-            mockActivity.registerAppOpenAdOnColdStart(
+            mockActivity.registerAppOpenAdForColdStart(
                 adUnitId, mockShowAdCallBack, closeSplashScreen
             )
         }
@@ -211,13 +211,13 @@ class AppOpenAdAdmobSetupWithExtensionFuncTest {
 
 
         with(appOpenAdAdmobSetupWithExtensionFunc) {
-            mockActivity.registerAppOpenAdOnColdStart(
+            mockActivity.registerAppOpenAdForColdStart(
                 adUnitId, mockShowAdCallBack, closeSplashScreen
             )
         }
 
         with(appOpenAdAdmobSetupWithExtensionFunc) {
-            mockActivity.registerAppOpenAdOnColdStart(
+            mockActivity.registerAppOpenAdForColdStart(
                 adUnitId, mockShowAdCallBack, closeSplashScreen
             )
         }

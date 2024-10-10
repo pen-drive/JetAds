@@ -14,6 +14,7 @@ import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.common.truth.Truth.assertThat
 import com.jet.ads.common.controller.AdsControl
 import com.jet.ads.common.controller.ControlProvider
+import com.jet.ads.common.controller.JetAdsControl
 import com.jet.ads.utils.pools.AdPool
 import io.mockk.every
 import io.mockk.mockk
@@ -30,7 +31,7 @@ class AdmobInitializerExtensionFunctionTest {
     private lateinit var adMobInterstitialPool: AdPool<InterstitialAd>
     private lateinit var adMobAppOpenPool: AdPool<AppOpenAd>
     private lateinit var controlProvider: ControlProvider
-    private lateinit var adsControl: AdsControl
+    private lateinit var adsControl: JetAdsControl
     private lateinit var activity: ComponentActivity
     private lateinit var admobInitializer: AdmobInitializer
     private lateinit var testLifecycleOwner: TestLifecycleOwner

@@ -7,7 +7,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jet.ads.common.initializers.AdsInitializer
 import com.jet.ads.common.initializers.AdsInitializeFactory
-import com.jet.ads.common.app_open.OpenAdSetup
 import com.jet.ads.common.app_open.AppOpenAdManagerFactory
 import com.jet.ads.admob.AdMobTestIds
 import com.jet.ads.common.app_open.AppOpenAdManager
@@ -26,7 +25,7 @@ class MainActivity : AppCompatActivity(),
 
         installSplashScreen().setKeepOnScreenCondition { keepSplashScreen }
 
-        registerAppOpenAdOnColdStart(AdMobTestIds.APP_OPEN, onCloseSplashScreen = {
+        registerAppOpenAdForColdStart(AdMobTestIds.APP_OPEN, onCloseSplashScreen = {
             keepSplashScreen = false
         })
 
