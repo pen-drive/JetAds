@@ -14,6 +14,6 @@ object AppOpenAdManagerFactory {
 
 
     fun admobAppOpenAdManager(): AppOpenAdManager {
-        return OpenAdAdmobSetupWithExtensionFunc()
+        return OpenAdAdmobSetupWithExtensionFunc(JetAds.module.appLifecycleManager)
     }
 }
