@@ -2,10 +2,12 @@ package com.jet.ads.utils.manager
 
 import android.app.Activity
 import android.content.Context
+import androidx.work.Logger
 import com.google.android.gms.ads.LoadAdError
 import com.jet.ads.utils.AdNotAvailableException
 import com.jet.ads.utils.AdProvider
 import com.jet.ads.common.controller.ControlProvider
+import com.jet.ads.logging.ILogger
 import com.jet.ads.utils.expiration.AdExpirationHandler
 import com.jet.ads.utils.pools.AdPool
 import com.jet.ads.utils.retry.RetryPolicy
@@ -15,7 +17,7 @@ internal abstract class BaseAdManager<TAd, TCallbacks>(
     private val adPool: AdPool<TAd>,
     private val adProvider: AdProvider<TAd, TCallbacks>,
     private val adExpirationHandler: AdExpirationHandler,
-    private val retryPolicy: RetryPolicy
+    private val retryPolicy: RetryPolicy,
 ) {
 
 
@@ -39,9 +41,11 @@ internal abstract class BaseAdManager<TAd, TCallbacks>(
         val appContext = context.applicationContext
 
         adProvider.load(adUnitId, appContext, { ad ->
+
             adPool.saveAd(adUnitId, ad)
             onAdLoaded()
         }, { error ->
+
             onFailedToLoad(error)
             retryPolicy.retry {
                 loadAd(adUnitId, appContext, onAdLoaded = onAdLoaded)

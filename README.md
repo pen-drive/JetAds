@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initializeAds(this) // Initialize the ads
+        initializeAds() // Initialize the ads
 
         setContent {
             //Compose content
@@ -120,15 +120,15 @@ Method to show ads whenever the app enters the foreground:
 ```kotlin
 class MainActivity : ComponentActivity(),
     AdsInitializer by AdsInitializeFactory.admobInitializer(),
-    OpenAdSetup by AppOpenAdManagerFactory.admobAppOpenInitializer() // <-- for app open ads
+    AppOpenAdManager by AppOpenAdManagerFactory.admobAppOpenAdManager() // <-- for app open ads
 {
     private var keepSplashScreen = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initializeAds(this)
+        initializeAds()
 
-        registerAppOpenAd("YOUR_APP_OPEN_ID", this)  // <-- for app open ads
+        registerAppOpenAd("YOUR_APP_OPEN_ID")  // <-- for app open ads
 
         setContent {
             //Compose content
@@ -142,25 +142,22 @@ Method to show ads whenever the app enters the foreground, and on [cold start](h
 ```kotlin
 class MainActivity : ComponentActivity(),
     AdsInitializer by AdsInitializeFactory.admobInitializer(),
-    OpenAdSetup by AppOpenAdManagerFactory.admobAppOpenInitializer() // <-- for app open ads
+    AppOpenAdManager by AppOpenAdManagerFactory.admobAppOpenAdManager()) // <-- for app open ads
 {
     private var keepSplashScreen = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initializeAds(this)
+        initializeAds()
 
         val splash = installSplashScreen()
         splash.setKeepOnScreenCondition {
             keepSplashScreen
         }
-      
-        registerAppOpenAd(AdMobTestIds.APP_OPEN,
-          this,
-          showOnColdStart = true,
-            closeSplashScreen = {
-                keepSplashScreen = false
-            })  // <-- for app open ads
+
+        registerAppOpenAdForColdStart(AdMobTestIds.APP_OPEN, onCloseSplashScreen = {
+            keepSplashScreen = false
+        }) // <-- for app open ads
 
         setContent {
             //Compose content
@@ -196,6 +193,11 @@ object AdMobTestIds {
 > [!TIP]
 > Take a look at the app module in this repository; there you can see more advanced ways to use this library.
 
+
+
+## Logs
+
+This library provides logs only in debug mode. It logs your ad IDs as tags, such as: 'ca-app-pub-3940256099942544/9257395921', allowing you to filter Logcat to view logs specific to each ad.
 
 ## Upcoming features (possibly)
 
