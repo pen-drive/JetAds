@@ -15,6 +15,8 @@ class MemoryLeakTest {
     @get:Rule
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
+
+    //todo need to be improved
     @Test
     fun testMemoryLeakOnActivityRecreation() {
         val scenario = activityRule.scenario

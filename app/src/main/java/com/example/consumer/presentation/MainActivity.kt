@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity(),
         })
 
 
-
         setContent {
             val viewModel: MainViewModel = viewModel()
             MainScreen(viewModel = viewModel)
