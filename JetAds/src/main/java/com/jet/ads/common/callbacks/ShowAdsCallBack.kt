@@ -61,8 +61,6 @@ data class ShowAdCallBack(
 )
 
 
-
-
 //OPEN APP
 interface OpenAppShowAdCallbacks : ShowAdCallbacks {
     fun onAdClicked()

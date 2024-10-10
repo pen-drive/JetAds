@@ -2,7 +2,7 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.pen-drive/jet-ads)](https://search.maven.org/artifact/io.github.pen-drive/jet-ads)
 [![License](https://img.shields.io/github/license/karacca/beetle)](https://www.apache.org/licenses/LICENSE-2.0)
-
+[![Android API](https://img.shields.io/badge/api-21%2B-green)](https://android-arsenal.com/api?level=21)
 
 
 ## Easy Ads for Jetpack Compose
@@ -17,7 +17,7 @@ Easily integrate and manage ads in your Jetpack Compose apps with a library that
 The easiest way to start using JetAds is to add it as a Gradle dependency in your app module's `build.gradle` file.
 
 ```kotlin
-implementation("io.github.pen-drive:jet-ads:1.0.3")
+implementation("io.github.pen-drive:jet-ads:<version>")
 ```
 
 > [!TIP]
@@ -44,15 +44,16 @@ After adding the library, add the following meta-data to your `AndroidManifest.x
 
 ```kotlin
 class MainActivity : ComponentActivity(),
-    AdsInitializer by AdsInitializeFactory.admobInitializer() {
+    AdsInitializer by AdsInitializeFactory.admobInitializer() // <- use delegation ,
+{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initializeAds(this) // Initialize the ads
+        initializeAds() // Initialize the ads
 
         setContent {
-            Greeting(name = "Android")
+            //Compose content
         }
     }
 }
@@ -74,7 +75,7 @@ To position the banner at the bottom of the screen:
 >   Scaffold(
 >     modifier = Modifier.fillMaxSize(),
 >     bottomBar = { AdaptiveBanner(AdMobTestIds.ADAPTIVE_BANNER) }) { innerPadding ->
->     //content
+>         //Compose content
 >     }
 > ```
 
@@ -119,15 +120,15 @@ Method to show ads whenever the app enters the foreground:
 ```kotlin
 class MainActivity : ComponentActivity(),
     AdsInitializer by AdsInitializeFactory.admobInitializer(),
-    OpenAdSetup by AppOpenAdManagerFactory.admobAppOpenInitializer() // <-- for app open ads
+    AppOpenAdManager by AppOpenAdManagerFactory.admobAppOpenAdManager() // <-- for app open ads
 {
     private var keepSplashScreen = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initializeAds(this)
+        initializeAds()
 
-        registerAppOpenAd("YOUR_APP_OPEN_ID", this)  // <-- for app open ads
+        registerAppOpenAd("YOUR_APP_OPEN_ID")  // <-- for app open ads
 
         setContent {
             //Compose content
@@ -141,25 +142,22 @@ Method to show ads whenever the app enters the foreground, and on [cold start](h
 ```kotlin
 class MainActivity : ComponentActivity(),
     AdsInitializer by AdsInitializeFactory.admobInitializer(),
-    OpenAdSetup by AppOpenAdManagerFactory.admobAppOpenInitializer() // <-- for app open ads
+    AppOpenAdManager by AppOpenAdManagerFactory.admobAppOpenAdManager()) // <-- for app open ads
 {
     private var keepSplashScreen = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initializeAds(this)
+        initializeAds()
 
         val splash = installSplashScreen()
         splash.setKeepOnScreenCondition {
             keepSplashScreen
         }
-      
-        registerAppOpenAd(AdMobTestIds.APP_OPEN,
-          this,
-          showOnColdStart = true,
-            closeSplashScreen = {
-                keepSplashScreen = false
-            })  // <-- for app open ads
+
+        registerAppOpenAdForColdStart(AdMobTestIds.APP_OPEN, onCloseSplashScreen = {
+            keepSplashScreen = false
+        }) // <-- for app open ads
 
         setContent {
             //Compose content
@@ -196,6 +194,11 @@ object AdMobTestIds {
 > Take a look at the app module in this repository; there you can see more advanced ways to use this library.
 
 
+
+## Logs
+
+This library provides logs only in debug mode. It logs your ad IDs as tags, such as: 'ca-app-pub-3940256099942544/9257395921', allowing you to filter Logcat to view logs specific to each ad.
+
 ## Upcoming features (possibly)
 
 - Native ads
@@ -209,4 +212,3 @@ When contributing, keep in mind:
 
 - The library's philosophy is to be easy to use, always hiding complex implementations from users.
 - Contributors must follow the 'Plug and Earn' principle, ensuring that this library remains simple and easy to use for developers.
-- Be careful with memory leaks! The demo app already includes LeakCanary; always check if your change hasn't caused any memory leaks. You need to add [LeakCanary to the pipeline](https://square.github.io/leakcanary/ui-tests/#leak-detection-in-ui-tests).

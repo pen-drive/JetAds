@@ -6,7 +6,7 @@ on:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
 
@@ -31,6 +31,17 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew :JetAds:build --warning-mode all
+
+#      - name: Start Emulator
+#        uses: ReactiveCircus/android-emulator-runner@v2.32.0
+#        with:
+#          api-level: 26
+#          target: google_apis
+#          arch: arm64-v8a
+#          profile: Nexus 6P
+#          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+#          script: ./gradlew :app:connectedAndroidTest --info
+#          disable-linux-hw-accel: true
 
       - name: Publish to Maven Central
         env:

@@ -14,6 +14,9 @@ import com.jet.ads.di.JetAdsLib
 import com.jet.ads.common.initializers.AdsInitializer
 import com.jet.ads.common.controller.AdsControl
 import com.jet.ads.common.controller.ControlProvider
+import com.jet.ads.common.controller.JetAdsControl
+import com.jet.ads.logging.ILogger
+import com.jet.ads.logging.Logger
 import com.jet.ads.utils.pools.AdPool
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,39 +24,54 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
 
 
 internal class AdmobInitializer(
     private val jetAdsLibs: JetAdsLib = JetAds,
+    private val logger: ILogger = Logger,
     private val controlLocator: ControlProvider = ControlProvider,
     private val adMobRewardedPool: AdPool<RewardedAd>,
     private val adMobInterstitialPool: AdPool<InterstitialAd>,
     private val adMobAppOpenPool: AdPool<AppOpenAd>,
+    private val backgroundScope: CoroutineScope = CoroutineScope(Dispatchers.IO),
 ) : AdsInitializer, LifecycleEventObserver {
 
     private val _adsInitializationStatus = MutableStateFlow(false)
     private val adsInitializationStatus = _adsInitializationStatus.asStateFlow()
 
-    private lateinit var backgroundScope: CoroutineScope
     private var activityRef: WeakReference<ComponentActivity>? = null
 
+    @Deprecated("this method is deprecated")
     override fun initializeAds(
         context: ComponentActivity, backgroundScope: CoroutineScope, adsControl: AdsControl
     ): Flow<Boolean> {
-        controlLocator.setAdControl(adsControl)
+        setupAdsInitialization(context, adsControl)
 
-        if (!adsControl.areAdsEnabled().value) return MutableStateFlow(true)
 
-        this.backgroundScope = backgroundScope
-        this.activityRef = WeakReference(context)
-
-        context.lifecycle.addObserver(this)
 
         return adsInitializationStatus
     }
 
+    override fun ComponentActivity.initializeAds(adsControl: JetAdsControl): Flow<Boolean> {
+        setupAdsInitialization(this, adsControl)
+        return adsInitializationStatus
+    }
+
+
+    private fun setupAdsInitialization(activity: ComponentActivity, adsControl: AdsControl) {
+        controlLocator.setAdControl(adsControl)
+
+        logger.checkConsumerIsInDebugMode(activity)
+
+        if (!adsControl.areAdsEnabled().value) {
+            _adsInitializationStatus.value = true
+            return
+        }
+
+        this.activityRef = WeakReference(activity)
+        activity.lifecycle.addObserver(this)
+    }
 
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
@@ -62,7 +80,6 @@ internal class AdmobInitializer(
         handleSdkInitialization(event, activity)
         clearLibToAvoidMemoryLeak(event, activity)
     }
-
 
 
     private fun handleSdkInitialization(event: Lifecycle.Event, activity: ComponentActivity) {

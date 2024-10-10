@@ -1,6 +1,7 @@
 package com.jet.ads.utils.manager
 
 import android.os.SystemClock
+import app.cash.turbine.test
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.rewarded.RewardedAd
@@ -18,6 +19,7 @@ import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -154,4 +156,64 @@ class AdPoolImplementationsTest {
         val allAds = AdMobInterstitialPool.getAllAds().first()
         assertThat(allAds).isEmpty()
     }
+
+
+    @Test
+    fun `AdMobInterstitialPool emits updated ads after operations`() = runTest {
+        val mockAd1 = mockk<InterstitialAd>(relaxed = true)
+        val mockAd2 = mockk<InterstitialAd>(relaxed = true)
+
+
+        AdMobInterstitialPool.getAllAds().test {
+
+            assertThat(awaitItem()).isEmpty()
+
+
+            AdMobInterstitialPool.saveAd("test_id1", mockAd1)
+            assertThat(awaitItem()).hasSize(1)
+
+            AdMobInterstitialPool.saveAd("test_id2", mockAd2)
+            assertThat(awaitItem()).hasSize(2)
+
+            AdMobInterstitialPool.deleteAdFromPool("test_id1", mockAd1)
+            assertThat(awaitItem()).hasSize(1)
+
+            AdMobInterstitialPool.clearPool()
+            assertThat(awaitItem()).isEmpty()
+
+
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
+
+    @Test
+    fun `AdMobRewardedPool emits updated ads after operations`() = runTest {
+        val mockAd1 = mockk<RewardedAd>(relaxed = true)
+        val mockAd2 = mockk<RewardedAd>(relaxed = true)
+
+        AdMobRewardedPool.clearPool()
+
+        AdMobRewardedPool.getAllAds().test {
+
+            assertThat(awaitItem()).isEmpty()
+
+
+            AdMobRewardedPool.saveAd("test_id1", mockAd1)
+            assertThat(awaitItem()).hasSize(1) // After saving the first ad
+
+            AdMobRewardedPool.saveAd("test_id2", mockAd2)
+            assertThat(awaitItem()).hasSize(2) // After saving the second ad
+
+            AdMobRewardedPool.deleteAdFromPool("test_id1", mockAd1)
+            assertThat(awaitItem()).hasSize(1) // After deleting the first ad
+
+            AdMobRewardedPool.clearPool()
+            assertThat(awaitItem()).isEmpty()
+
+
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
 }
