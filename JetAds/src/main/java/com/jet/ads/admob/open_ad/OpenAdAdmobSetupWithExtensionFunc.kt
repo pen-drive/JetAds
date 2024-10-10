@@ -25,24 +25,26 @@ internal class OpenAdAdmobSetupWithExtensionFunc(
     private var adsControlImpl: AdsControl? = null
     private var callbacks: OpenAppShowAdCallbacks? = null
     private var closeSplashScreenRef: WeakReference<(() -> Unit)>? = null
+    private var isAdRegistered: Boolean = false  // Flag para verificar se o registro já foi feito
 
+    class AdAlreadyRegisteredException : Exception("App Open Ad has already been registered")
 
     override fun ComponentActivity.registerAppOpenAd(
         adUnitId: String,
         showAdsCallbacks: ShowAdCallBack?
     ) {
+        if (isAdRegistered) throw AdAlreadyRegisteredException() // Lança exceção se já registrado
         registerAppOpenAdInternal(adUnitId, this, false, showAdsCallbacks, null)
     }
-
 
     override fun ComponentActivity.registerAppOpenAdOnColdStart(
         adUnitId: String,
         showAdsCallbacks: ShowAdCallBack?,
         onCloseSplashScreen: () -> Unit
     ) {
+        if (isAdRegistered) throw AdAlreadyRegisteredException() // Lança exceção se já registrado
         registerAppOpenAdInternal(adUnitId, this, true, showAdsCallbacks, onCloseSplashScreen)
     }
-
 
     private fun registerAppOpenAdInternal(
         adUnitId: String,
@@ -80,8 +82,9 @@ internal class OpenAdAdmobSetupWithExtensionFunc(
         }) {
             appLifecycleManager.notifyAdShown()
         }
-    }
 
+        isAdRegistered = true  // Marca como registrado
+    }
 
     override fun onAppStart() {
         if (adsControlImpl?.areAdsEnabled()?.value != true) return
@@ -89,12 +92,10 @@ internal class OpenAdAdmobSetupWithExtensionFunc(
         appOpenAdManager?.showAd(adUnitId ?: return, activity, callbacks)
     }
 
-
     private fun safeCloseSplashScreen() {
         closeSplashScreenRef?.get()?.invoke()
         closeSplashScreenRef = null
     }
-
 
     private fun registerActivityForOpenAdSetup(
         onFailedToLoad: (error: LoadAdError) -> Unit = {}, onAddLoad: () -> Unit
@@ -118,7 +119,6 @@ internal class OpenAdAdmobSetupWithExtensionFunc(
             }
         })
     }
-
 
     private fun createCallbacks(
         showAdsCallbacks: ShowAdCallBack?
@@ -147,11 +147,12 @@ internal class OpenAdAdmobSetupWithExtensionFunc(
         }
     }
 
-
     private fun onDestroy() {
         appLifecycleManager.unregisterCallback(this)
         activityRef?.clear()
         appOpenAdManager = null
         callbacks = null
+        isAdRegistered = false  // Libera o registro ao destruir
     }
 }
+

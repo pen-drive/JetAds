@@ -46,8 +46,9 @@ class OpenAdAdmobSetupWithExtensionFuncTest {
         every { mockAdsControl.areAdsEnabled() } returns adsEnabledFlow
         every { mockActivity.lifecycle } returns mockLifecycle
 
-        openAdAdmobSetupWithExtensionFunc =
-            OpenAdAdmobSetupWithExtensionFunc(mockAppLifecycleManager, mockControlProvider, mockAppOpenAdManager)
+        openAdAdmobSetupWithExtensionFunc = OpenAdAdmobSetupWithExtensionFunc(
+            mockAppLifecycleManager, mockControlProvider, mockAppOpenAdManager
+        )
 
         mockkConstructor(AppOpenAdManager::class)
         every { anyConstructed<AppOpenAdManager>().loadAd(any(), any(), any(), any()) } just Runs
@@ -183,4 +184,43 @@ class OpenAdAdmobSetupWithExtensionFuncTest {
             closeSplashScreen()
         }
     }
+
+
+    @Test(expected = OpenAdAdmobSetupWithExtensionFunc.AdAlreadyRegisteredException::class)
+    fun `registerAppOpenAd throws exception if already registered`() = runTest {
+        val adUnitId = "test_ad_unit_id"
+
+
+        with(openAdAdmobSetupWithExtensionFunc) {
+            mockActivity.registerAppOpenAd(adUnitId, mockShowAdCallBack)
+        }
+
+
+        with(openAdAdmobSetupWithExtensionFunc) {
+            mockActivity.registerAppOpenAd(adUnitId, mockShowAdCallBack)
+        }
+
+    }
+
+    @Test(expected = OpenAdAdmobSetupWithExtensionFunc.AdAlreadyRegisteredException::class)
+    fun `registerAppOpenAdOnColdStart throws exception if already registered`() = runTest {
+        val adUnitId = "test_ad_unit_id"
+        val closeSplashScreen: () -> Unit = mockk(relaxed = true)
+
+
+        with(openAdAdmobSetupWithExtensionFunc) {
+            mockActivity.registerAppOpenAdOnColdStart(
+                adUnitId, mockShowAdCallBack, closeSplashScreen
+            )
+        }
+
+        with(openAdAdmobSetupWithExtensionFunc) {
+            mockActivity.registerAppOpenAdOnColdStart(
+                adUnitId, mockShowAdCallBack, closeSplashScreen
+            )
+        }
+
+    }
+
+
 }
