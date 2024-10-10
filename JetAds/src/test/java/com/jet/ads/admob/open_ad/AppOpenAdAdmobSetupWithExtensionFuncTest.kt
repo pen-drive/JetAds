@@ -3,7 +3,9 @@ package com.jet.ads.admob.open_ad
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.LoadAdError
+import com.jet.ads.common.callbacks.OpenAppShowAdCallbacks
 import com.jet.ads.common.callbacks.ShowAdCallBack
 import com.jet.ads.common.controller.AdsControl
 import com.jet.ads.common.controller.ControlProvider
@@ -19,9 +21,9 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-class OpenAdAdmobSetupWithExtensionFuncTest {
+class AppOpenAdAdmobSetupWithExtensionFuncTest {
 
-    private lateinit var openAdAdmobSetupWithExtensionFunc: OpenAdAdmobSetupWithExtensionFunc
+    private lateinit var appOpenAdAdmobSetupWithExtensionFunc: AppOpenAdAdmobSetupWithExtensionFunc
     private lateinit var mockAppLifecycleManager: AppLifecycleManager
     private lateinit var mockControlProvider: ControlProvider
     private lateinit var mockAdsControl: AdsControl
@@ -46,7 +48,7 @@ class OpenAdAdmobSetupWithExtensionFuncTest {
         every { mockAdsControl.areAdsEnabled() } returns adsEnabledFlow
         every { mockActivity.lifecycle } returns mockLifecycle
 
-        openAdAdmobSetupWithExtensionFunc = OpenAdAdmobSetupWithExtensionFunc(
+        appOpenAdAdmobSetupWithExtensionFunc = AppOpenAdAdmobSetupWithExtensionFunc(
             mockAppLifecycleManager, mockControlProvider, mockAppOpenAdManager
         )
 
@@ -60,7 +62,7 @@ class OpenAdAdmobSetupWithExtensionFuncTest {
         adsEnabledFlow.value = false
 
 
-        with(openAdAdmobSetupWithExtensionFunc) {
+        with(appOpenAdAdmobSetupWithExtensionFunc) {
             mockActivity.registerAppOpenAd(
                 "test_ad_unit_id", mockShowAdCallBack
             )
@@ -76,11 +78,11 @@ class OpenAdAdmobSetupWithExtensionFuncTest {
     @Test
     fun `onAppStart shows ad when ads are enabled`() = runTest {
         val adUnitId = "test_ad_unit_id"
-        with(openAdAdmobSetupWithExtensionFunc) {
+        with(appOpenAdAdmobSetupWithExtensionFunc) {
             mockActivity.registerAppOpenAd(adUnitId, mockShowAdCallBack)
         }
 
-        openAdAdmobSetupWithExtensionFunc.onAppStart()
+        appOpenAdAdmobSetupWithExtensionFunc.onAppStart()
 
         verify {
             mockAppOpenAdManager.showAd(adUnitId, mockActivity, any())
@@ -91,11 +93,11 @@ class OpenAdAdmobSetupWithExtensionFuncTest {
     fun `onAppStart does not show ad when ads are disabled`() = runTest {
         adsEnabledFlow.value = false
         val adUnitId = "test_ad_unit_id"
-        with(openAdAdmobSetupWithExtensionFunc) {
+        with(appOpenAdAdmobSetupWithExtensionFunc) {
             mockActivity.registerAppOpenAd(adUnitId, mockShowAdCallBack)
         }
 
-        openAdAdmobSetupWithExtensionFunc.onAppStart()
+        appOpenAdAdmobSetupWithExtensionFunc.onAppStart()
 
         verify(exactly = 0) {
             mockAppOpenAdManager.showAd(any(), any(), any())
@@ -105,7 +107,7 @@ class OpenAdAdmobSetupWithExtensionFuncTest {
     @Test
     fun `lifecycle observer is added and removed correctly`() = runTest {
         val adUnitId = "test_ad_unit_id"
-        with(openAdAdmobSetupWithExtensionFunc) {
+        with(appOpenAdAdmobSetupWithExtensionFunc) {
             mockActivity.registerAppOpenAd(adUnitId, mockShowAdCallBack)
         }
 
@@ -116,7 +118,7 @@ class OpenAdAdmobSetupWithExtensionFuncTest {
         capturedObserver.onStateChanged(mockk(), Lifecycle.Event.ON_DESTROY)
 
         verify(exactly = 1) {
-            mockAppLifecycleManager.unregisterCallback(openAdAdmobSetupWithExtensionFunc)
+            mockAppLifecycleManager.unregisterCallback(appOpenAdAdmobSetupWithExtensionFunc)
             mockLifecycle.removeObserver(any())
         }
     }
@@ -126,7 +128,7 @@ class OpenAdAdmobSetupWithExtensionFuncTest {
         val adUnitId = "test_ad_unit_id"
         val closeSplashScreen: () -> Unit = mockk(relaxed = true)
 
-        with(openAdAdmobSetupWithExtensionFunc) {
+        with(appOpenAdAdmobSetupWithExtensionFunc) {
             mockActivity.registerAppOpenAdOnColdStart(
                 adUnitId, mockShowAdCallBack, closeSplashScreen
             )
@@ -134,7 +136,7 @@ class OpenAdAdmobSetupWithExtensionFuncTest {
 
         verify {
             mockAppLifecycleManager.setShowOnColdStart(true)
-            mockAppLifecycleManager.registerCallback(openAdAdmobSetupWithExtensionFunc)
+            mockAppLifecycleManager.registerCallback(appOpenAdAdmobSetupWithExtensionFunc)
             mockAppOpenAdManager.loadAd(eq(adUnitId), eq(mockActivity), any(), any())
         }
     }
@@ -146,7 +148,7 @@ class OpenAdAdmobSetupWithExtensionFuncTest {
 
         every { mockAppLifecycleManager.isFirstEntry() } returns false
 
-        with(openAdAdmobSetupWithExtensionFunc) {
+        with(appOpenAdAdmobSetupWithExtensionFunc) {
             mockActivity.registerAppOpenAdOnColdStart(
                 adUnitId, mockShowAdCallBack, closeSplashScreen
             )
@@ -174,7 +176,7 @@ class OpenAdAdmobSetupWithExtensionFuncTest {
             onFailedToLoadSlot.captured.invoke(LoadAdError(0, "", "", null, null))
         }
 
-        with(openAdAdmobSetupWithExtensionFunc) {
+        with(appOpenAdAdmobSetupWithExtensionFunc) {
             mockActivity.registerAppOpenAdOnColdStart(
                 adUnitId, mockShowAdCallBack, closeSplashScreen
             )
@@ -186,41 +188,152 @@ class OpenAdAdmobSetupWithExtensionFuncTest {
     }
 
 
-    @Test(expected = OpenAdAdmobSetupWithExtensionFunc.AdAlreadyRegisteredException::class)
+    @Test(expected = AppOpenAdAdmobSetupWithExtensionFunc.AdAlreadyRegisteredException::class)
     fun `registerAppOpenAd throws exception if already registered`() = runTest {
         val adUnitId = "test_ad_unit_id"
 
 
-        with(openAdAdmobSetupWithExtensionFunc) {
+        with(appOpenAdAdmobSetupWithExtensionFunc) {
             mockActivity.registerAppOpenAd(adUnitId, mockShowAdCallBack)
         }
 
 
-        with(openAdAdmobSetupWithExtensionFunc) {
+        with(appOpenAdAdmobSetupWithExtensionFunc) {
             mockActivity.registerAppOpenAd(adUnitId, mockShowAdCallBack)
         }
 
     }
 
-    @Test(expected = OpenAdAdmobSetupWithExtensionFunc.AdAlreadyRegisteredException::class)
+    @Test(expected = AppOpenAdAdmobSetupWithExtensionFunc.AdAlreadyRegisteredException::class)
     fun `registerAppOpenAdOnColdStart throws exception if already registered`() = runTest {
         val adUnitId = "test_ad_unit_id"
         val closeSplashScreen: () -> Unit = mockk(relaxed = true)
 
 
-        with(openAdAdmobSetupWithExtensionFunc) {
+        with(appOpenAdAdmobSetupWithExtensionFunc) {
             mockActivity.registerAppOpenAdOnColdStart(
                 adUnitId, mockShowAdCallBack, closeSplashScreen
             )
         }
 
-        with(openAdAdmobSetupWithExtensionFunc) {
+        with(appOpenAdAdmobSetupWithExtensionFunc) {
             mockActivity.registerAppOpenAdOnColdStart(
                 adUnitId, mockShowAdCallBack, closeSplashScreen
             )
         }
 
     }
+
+
+
+    ///callbacks test
+
+    @Test
+    fun `onAppStart triggers onAdClicked callback when ad is clicked`() = runTest {
+        val adUnitId = "test_ad_unit_id"
+        val mockShowAdCallBack = mockk<ShowAdCallBack>(relaxed = true)
+        val callbackSlot = slot<OpenAppShowAdCallbacks>()
+
+        with(appOpenAdAdmobSetupWithExtensionFunc) {
+            mockActivity.registerAppOpenAd(adUnitId, mockShowAdCallBack)
+        }
+
+        every {
+            mockAppOpenAdManager.showAd(any(), any(), capture(callbackSlot))
+        } answers {
+            callbackSlot.captured.onAdClicked()
+        }
+
+        appOpenAdAdmobSetupWithExtensionFunc.onAppStart()
+
+        verify { mockShowAdCallBack.onAdClicked?.invoke() }
+    }
+
+    @Test
+    fun `onAppStart triggers onAdDismissed callback when ad is dismissed`() = runTest {
+        val adUnitId = "test_ad_unit_id"
+        val mockShowAdCallBack = mockk<ShowAdCallBack>(relaxed = true)
+        val callbackSlot = slot<OpenAppShowAdCallbacks>()
+
+        with(appOpenAdAdmobSetupWithExtensionFunc) {
+            mockActivity.registerAppOpenAd(adUnitId, mockShowAdCallBack)
+        }
+
+        every {
+            mockAppOpenAdManager.showAd(any(), any(), capture(callbackSlot))
+        } answers {
+            callbackSlot.captured.onAdDismissed()
+        }
+
+        appOpenAdAdmobSetupWithExtensionFunc.onAppStart()
+
+        verify { mockShowAdCallBack.onAdDismissed?.invoke() }
+    }
+
+    @Test
+    fun `onAppStart triggers onAdFailedToShow callback when ad fails to show`() = runTest {
+        val adUnitId = "test_ad_unit_id"
+        val mockShowAdCallBack = mockk<ShowAdCallBack>(relaxed = true)
+        val mockAdError = mockk<AdError>(relaxed = true)
+        val callbackSlot = slot<OpenAppShowAdCallbacks>()
+
+        with(appOpenAdAdmobSetupWithExtensionFunc) {
+            mockActivity.registerAppOpenAd(adUnitId, mockShowAdCallBack)
+        }
+
+        every {
+            mockAppOpenAdManager.showAd(any(), any(), capture(callbackSlot))
+        } answers {
+            callbackSlot.captured.onAdFailedToShow(mockAdError)
+        }
+
+        appOpenAdAdmobSetupWithExtensionFunc.onAppStart()
+
+        verify { mockShowAdCallBack.onAdFailedToShow.invoke() }
+    }
+
+    @Test
+    fun `onAppStart triggers onAdImpression callback when ad impression occurs`() = runTest {
+        val adUnitId = "test_ad_unit_id"
+        val mockShowAdCallBack = mockk<ShowAdCallBack>(relaxed = true)
+        val callbackSlot = slot<OpenAppShowAdCallbacks>()
+
+        with(appOpenAdAdmobSetupWithExtensionFunc) {
+            mockActivity.registerAppOpenAd(adUnitId, mockShowAdCallBack)
+        }
+
+        every {
+            mockAppOpenAdManager.showAd(any(), any(), capture(callbackSlot))
+        } answers {
+            callbackSlot.captured.onAdImpression()
+        }
+
+        appOpenAdAdmobSetupWithExtensionFunc.onAppStart()
+
+        verify { mockShowAdCallBack.onAdImpression?.invoke() }
+    }
+
+    @Test
+    fun `onAppStart triggers onAdShowed callback when ad is shown`() = runTest {
+        val adUnitId = "test_ad_unit_id"
+        val mockShowAdCallBack = mockk<ShowAdCallBack>(relaxed = true)
+        val callbackSlot = slot<OpenAppShowAdCallbacks>()
+
+        with(appOpenAdAdmobSetupWithExtensionFunc) {
+            mockActivity.registerAppOpenAd(adUnitId, mockShowAdCallBack)
+        }
+
+        every {
+            mockAppOpenAdManager.showAd(any(), any(), capture(callbackSlot))
+        } answers {
+            callbackSlot.captured.onAdShowed()
+        }
+
+        appOpenAdAdmobSetupWithExtensionFunc.onAppStart()
+
+        verify { mockShowAdCallBack.onAdShowed?.invoke() }
+    }
+
 
 
 }

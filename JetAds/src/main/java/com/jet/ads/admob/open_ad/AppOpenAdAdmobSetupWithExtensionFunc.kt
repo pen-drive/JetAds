@@ -14,7 +14,7 @@ import java.lang.ref.WeakReference
 
 
 
-internal class OpenAdAdmobSetupWithExtensionFunc(
+internal class AppOpenAdAdmobSetupWithExtensionFunc(
     private val appLifecycleManager: AppLifecycleManager,
     private var controlLocator: ControlProvider = ControlProvider,
     private var appOpenAdManager: AppOpenAdManager? = AppOpenAdManager(),
@@ -25,7 +25,7 @@ internal class OpenAdAdmobSetupWithExtensionFunc(
     private var adsControlImpl: AdsControl? = null
     private var callbacks: OpenAppShowAdCallbacks? = null
     private var closeSplashScreenRef: WeakReference<(() -> Unit)>? = null
-    private var isAdRegistered: Boolean = false  // Flag para verificar se o registro já foi feito
+    private var isAdRegistered: Boolean = false
 
     class AdAlreadyRegisteredException : Exception("App Open Ad has already been registered")
 
@@ -33,7 +33,7 @@ internal class OpenAdAdmobSetupWithExtensionFunc(
         adUnitId: String,
         showAdsCallbacks: ShowAdCallBack?
     ) {
-        if (isAdRegistered) throw AdAlreadyRegisteredException() // Lança exceção se já registrado
+        if (isAdRegistered) throw AdAlreadyRegisteredException()
         registerAppOpenAdInternal(adUnitId, this, false, showAdsCallbacks, null)
     }
 
@@ -42,7 +42,7 @@ internal class OpenAdAdmobSetupWithExtensionFunc(
         showAdsCallbacks: ShowAdCallBack?,
         onCloseSplashScreen: () -> Unit
     ) {
-        if (isAdRegistered) throw AdAlreadyRegisteredException() // Lança exceção se já registrado
+        if (isAdRegistered) throw AdAlreadyRegisteredException()
         registerAppOpenAdInternal(adUnitId, this, true, showAdsCallbacks, onCloseSplashScreen)
     }
 
@@ -83,7 +83,7 @@ internal class OpenAdAdmobSetupWithExtensionFunc(
             appLifecycleManager.notifyAdShown()
         }
 
-        isAdRegistered = true  // Marca como registrado
+        isAdRegistered = true
     }
 
     override fun onAppStart() {
@@ -152,7 +152,7 @@ internal class OpenAdAdmobSetupWithExtensionFunc(
         activityRef?.clear()
         appOpenAdManager = null
         callbacks = null
-        isAdRegistered = false  // Libera o registro ao destruir
+        isAdRegistered = false
     }
 }
 

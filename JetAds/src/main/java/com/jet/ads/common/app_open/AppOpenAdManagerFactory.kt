@@ -1,7 +1,7 @@
 package com.jet.ads.common.app_open
 
 import com.jet.ads.admob.open_ad.OpenAdAdmobSetup
-import com.jet.ads.admob.open_ad.OpenAdAdmobSetupWithExtensionFunc
+import com.jet.ads.admob.open_ad.AppOpenAdAdmobSetupWithExtensionFunc
 import com.jet.ads.di.JetAds
 
 object AppOpenAdManagerFactory {
@@ -14,6 +14,6 @@ object AppOpenAdManagerFactory {
 
 
     fun admobAppOpenAdManager(): AppOpenAdManager {
-        return OpenAdAdmobSetupWithExtensionFunc(JetAds.module.appLifecycleManager)
+        return AppOpenAdAdmobSetupWithExtensionFunc(JetAds.module.appLifecycleManager)
     }
 }
