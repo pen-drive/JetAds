@@ -58,7 +58,11 @@ class AdmobInitializerTest {
         testLifecycleOwner = TestLifecycleOwner()
 
         admobInitializer = AdmobInitializer(
-            jetAdsLib, controlProvider, adMobRewardedPool, adMobInterstitialPool, adMobAppOpenPool
+            jetAdsLib,
+            controlLocator = controlProvider,
+            adMobRewardedPool = adMobRewardedPool,
+            adMobInterstitialPool = adMobInterstitialPool,
+            adMobAppOpenPool = adMobAppOpenPool
         )
     }
 

@@ -11,6 +11,8 @@ interface AdsControl {
     fun setAdsEnabled(enabled: Boolean)
 
 }
+
+
 interface JetAdsControl: AdsControl {
 
     fun isAdsEnabled(): StateFlow<Boolean>
