@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jet.ads.common.initializers.AdsInitializer
 import com.jet.ads.common.initializers.AdsInitializeFactory
@@ -11,6 +12,8 @@ import com.jet.ads.common.app_open.OpenAdSetup
 import com.jet.ads.common.app_open.AppOpenAdManagerFactory
 import com.jet.ads.admob.AdMobTestIds
 import com.jet.ads.common.controller.JetAdsAdsControlImpl
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity(),
@@ -22,11 +25,10 @@ class MainActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val splash = installSplashScreen()
-
         initializeAds()
 
-        splash.setKeepOnScreenCondition { keepSplashScreen }
+        installSplashScreen().setKeepOnScreenCondition { keepSplashScreen }
+
         registerAppOpenAd(AdMobTestIds.APP_OPEN, this, showOnColdStart = false) {
             keepSplashScreen = false
 

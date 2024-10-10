@@ -45,28 +45,26 @@ internal class AdmobInitializer(
     override fun initializeAds(
         context: ComponentActivity, backgroundScope: CoroutineScope, adsControl: AdsControl
     ): Flow<Boolean> {
-        controlLocator.setAdControl(adsControl)
-
-        if (!adsControl.areAdsEnabled().value) return MutableStateFlow(true)
-
-        this.activityRef = WeakReference(context)
-
-        context.lifecycle.addObserver(this)
-
+        setupAdsInitialization(context, adsControl)
         return adsInitializationStatus
     }
 
     override fun ComponentActivity.initializeAds(adsControl: AdsControl): Flow<Boolean> {
+        setupAdsInitialization(this, adsControl)
+        return adsInitializationStatus
+    }
+
+
+    private fun setupAdsInitialization(activity: ComponentActivity, adsControl: AdsControl) {
         controlLocator.setAdControl(adsControl)
 
-        if (!adsControl.areAdsEnabled().value) return MutableStateFlow(true)
+        if (!adsControl.areAdsEnabled().value) {
+            _adsInitializationStatus.value = true
+            return
+        }
 
-
-        this@AdmobInitializer.activityRef = WeakReference(this)
-
-        this.lifecycle.addObserver(this@AdmobInitializer)
-
-        return adsInitializationStatus
+        this.activityRef = WeakReference(activity)
+        activity.lifecycle.addObserver(this)
     }
 
 

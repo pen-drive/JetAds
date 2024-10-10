@@ -1,7 +1,6 @@
 package com.jet.ads.admob
 
 import androidx.activity.ComponentActivity
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.testing.TestLifecycleOwner
 import app.cash.turbine.test
@@ -15,93 +14,80 @@ import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.common.truth.Truth.assertThat
 import com.jet.ads.common.controller.AdsControl
 import com.jet.ads.common.controller.ControlProvider
-import com.jet.ads.common.controller.JetAdsAdsControlImpl
-import com.jet.ads.common.initializers.AdsInitializeFactory
-import com.jet.ads.common.initializers.AdsInitializer
-import com.jet.ads.di.JetAdsLib
 import com.jet.ads.utils.pools.AdPool
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.verify
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-
-class AdmobInitializerTest {
+class AdmobInitializerExtensionFunctionTest {
 
     private lateinit var adMobRewardedPool: AdPool<RewardedAd>
     private lateinit var adMobInterstitialPool: AdPool<InterstitialAd>
     private lateinit var adMobAppOpenPool: AdPool<AppOpenAd>
-    private lateinit var jetAdsLib: JetAdsLib
     private lateinit var controlProvider: ControlProvider
     private lateinit var adsControl: AdsControl
     private lateinit var activity: ComponentActivity
     private lateinit var admobInitializer: AdmobInitializer
     private lateinit var testLifecycleOwner: TestLifecycleOwner
 
+
     @Before
     fun setup() {
         adMobRewardedPool = mockk(relaxed = true)
         adMobInterstitialPool = mockk(relaxed = true)
         adMobAppOpenPool = mockk(relaxed = true)
-        jetAdsLib = mockk(relaxed = true)
         controlProvider = mockk(relaxed = true)
         adsControl = mockk(relaxed = true)
         activity = mockk(relaxed = true)
+
         testLifecycleOwner = TestLifecycleOwner()
 
+
+        every { activity.lifecycle } returns testLifecycleOwner.lifecycle
+
+
         admobInitializer = AdmobInitializer(
-            jetAdsLib, controlProvider, adMobRewardedPool, adMobInterstitialPool, adMobAppOpenPool
+            controlLocator = controlProvider,
+            adMobRewardedPool = adMobRewardedPool,
+            adMobInterstitialPool = adMobInterstitialPool,
+            adMobAppOpenPool = adMobAppOpenPool
         )
     }
 
-
     @Test
-    fun `initializeAds should set custom ad control immediately in initialization even ads are enable`() =
-        runTest {
-            every { adsControl.areAdsEnabled() } returns MutableStateFlow(true)
+    fun `initializeAds extension function should set custom ad control when ads are enabled`() = runTest {
+        every { adsControl.areAdsEnabled() } returns MutableStateFlow(true)
 
-            admobInitializer.initializeAds(activity, this, adsControl)
 
-            verify { controlProvider.setAdControl(any()) }
+        with(admobInitializer) {
+            activity.initializeAds(adsControl)
         }
 
-    @Test
-    fun `initializeAds should set custom ad control immediately in initialization even ads are disabled`() =
-        runTest {
-            every { adsControl.areAdsEnabled() } returns MutableStateFlow(false)
-
-            val result = admobInitializer.initializeAds(activity, this, adsControl)
-
-            verify { adsControl.areAdsEnabled() }
-            verify { controlProvider.setAdControl(any()) }
-            assertThat(result.first()).isTrue()
-        }
-
-
-    @Test
-    fun `initializeAds should return true immediately when ads are disabled`() = runTest {
-        every { adsControl.areAdsEnabled() } returns MutableStateFlow(false)
-
-        val result = admobInitializer.initializeAds(activity, this, adsControl)
-
-        verify { adsControl.areAdsEnabled() }
-        assertThat(result.first()).isTrue()
+        verify { controlProvider.setAdControl(any()) }
     }
 
     @Test
-    fun `initializeAds should initialize MobileAds when ads are enabled`() = runTest {
+    fun `initializeAds extension function should return true immediately when ads are disabled`() = runTest {
+        every { adsControl.areAdsEnabled() } returns MutableStateFlow(false)
 
+        val result = with(admobInitializer) {
+            activity.initializeAds(adsControl)
+        }
+
+        result.test {
+            assertThat(awaitItem()).isTrue()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `initializeAds extension function should initialize MobileAds when ads are enabled`() = runTest {
         every { adsControl.areAdsEnabled() } returns MutableStateFlow(true)
-        every { activity.lifecycle } returns testLifecycleOwner.lifecycle
-
 
         mockkStatic(MobileAds::class)
 
@@ -109,7 +95,6 @@ class AdmobInitializerTest {
             MobileAds.initialize(any(), any())
         } answers {
             val listener = secondArg<OnInitializationCompleteListener>()
-
 
             val statusMock = mockk<InitializationStatus> {
                 every { adapterStatusMap } returns mapOf("TestAdapter" to mockk {
@@ -120,9 +105,9 @@ class AdmobInitializerTest {
             listener.onInitializationComplete(statusMock)
         }
 
-
-        val result = admobInitializer.initializeAds(activity, this, adsControl)
-
+        val result = with(admobInitializer) {
+            activity.initializeAds(adsControl)
+        }
 
         result.test {
             assertThat(awaitItem()).isFalse()
@@ -130,47 +115,38 @@ class AdmobInitializerTest {
             cancelAndIgnoreRemainingEvents()
         }
 
-
         verify { controlProvider.setAdControl(adsControl) }
         verify { MobileAds.initialize(any(), any()) }
     }
 
-
     @Test
-    fun `initializeAds shouldn't initialize MobileAds when ads are disabled`() = runTest {
+    fun `initializeAds extension function shouldn't initialize MobileAds when ads are disabled`() = runTest {
         every { adsControl.areAdsEnabled() } returns MutableStateFlow(false)
-        every { activity.lifecycle } returns testLifecycleOwner.lifecycle
+
 
         mockkStatic(MobileAds::class)
-        admobInitializer.initializeAds(activity, this, adsControl)
 
+        with(admobInitializer) {
+            activity.initializeAds(adsControl)
+        }
 
         verify(exactly = 0) { MobileAds.initialize(any(), any()) }
     }
 
-
     @Test
-    fun `onStateChanged should clear pools and remove observer on ON_DESTROY`() = runTest {
-
+    fun `onStateChanged should clear ad pools and remove observer on ON_DESTROY`() = runTest {
         every { adsControl.areAdsEnabled() } returns MutableStateFlow(true)
-        admobInitializer.initializeAds(activity, this, adsControl)
-        admobInitializer.onStateChanged(testLifecycleOwner, Lifecycle.Event.ON_DESTROY)
 
+        with(admobInitializer) {
+            activity.initializeAds(adsControl)
+        }
 
+        admobInitializer.onStateChanged(activity, Lifecycle.Event.ON_DESTROY)
 
         verify { adMobRewardedPool.clearPool() }
         verify { adMobInterstitialPool.clearPool() }
         verify { adMobAppOpenPool.clearPool() }
-    }
 
-
-    @Test
-    fun `onStateChanged should clear lifecycle observer on ON_DESTROY`() = runTest {
-
-        every { adsControl.areAdsEnabled() } returns MutableStateFlow(true)
-        admobInitializer.initializeAds(activity, this, adsControl)
-        admobInitializer.onStateChanged(testLifecycleOwner, Lifecycle.Event.ON_DESTROY)
-
-        verify { activity.lifecycle.removeObserver(any()) }
+        verify { activity.lifecycle.removeObserver(admobInitializer) }
     }
 }

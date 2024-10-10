@@ -10,8 +10,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface AdsInitializer {
 
-
-
     /**
      * You should call this method on the OnCreate of MainActivity!
      *
@@ -27,8 +25,9 @@ interface AdsInitializer {
     ): Flow<Boolean>
 
 
-
     fun ComponentActivity.initializeAds(
         adsControl: AdsControl = JetAdsAdsControlImpl,
     ): Flow<Boolean>
+
+
 }
