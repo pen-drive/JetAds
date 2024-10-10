@@ -16,7 +16,12 @@ object JetAdsAdsControlImpl : AdsControl {
 
     private val _isToShowAdds = MutableStateFlow(true)
 
+    @Deprecated("Bad name, use isAdsEnabled", replaceWith = ReplaceWith("isAdsEnabled()"))
     override fun areAdsEnabled(): StateFlow<Boolean> {
+        return _isToShowAdds.asStateFlow()
+    }
+
+    override fun isAdsEnabled(): StateFlow<Boolean> {
         return _isToShowAdds.asStateFlow()
     }
 
