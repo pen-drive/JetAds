@@ -13,8 +13,10 @@ import com.jet.ads.admob.AdMobTestIds
 import com.jet.ads.common.app_open.AppOpenAdManager
 
 
-class MainActivity : AppCompatActivity(), AdsInitializer by AdsInitializeFactory.admobInitializer(),
-    AppOpenAdManager by AppOpenAdManagerFactory.admobAppOpenAdManager() {
+class MainActivity : AppCompatActivity(),
+    AdsInitializer by AdsInitializeFactory.admobInitializer(),
+    AppOpenAdManager by AppOpenAdManagerFactory.admobAppOpenAdManager()
+{
 
     private var keepSplashScreen = true
 
@@ -24,7 +26,6 @@ class MainActivity : AppCompatActivity(), AdsInitializer by AdsInitializeFactory
 
         installSplashScreen().setKeepOnScreenCondition { keepSplashScreen }
 
-        registerAppOpenAd(AdMobTestIds.APP_OPEN)
         registerAppOpenAdOnColdStart(AdMobTestIds.APP_OPEN, onCloseSplashScreen = {
             keepSplashScreen = false
         })
