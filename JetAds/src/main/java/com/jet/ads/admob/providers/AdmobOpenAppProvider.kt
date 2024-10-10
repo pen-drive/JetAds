@@ -12,7 +12,7 @@ import com.jet.ads.logging.ILogger
 import com.jet.ads.utils.AdProvider
 
 
-class AdmobOpenAppProvider(
+internal class AdmobOpenAppProvider(
     private val logger: ILogger = com.jet.ads.logging.Logger,
 ) : AdProvider<AppOpenAd, OpenAppShowAdCallbacks> {
     override fun load(

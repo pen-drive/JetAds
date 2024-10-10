@@ -12,7 +12,7 @@ import com.jet.ads.utils.AdProvider
 import com.jet.ads.common.callbacks.InterstitialShowAdCallbacks
 import com.jet.ads.logging.ILogger
 
-class AdmobInterstitialProvider(
+internal class AdmobInterstitialProvider(
     private val logger: ILogger = com.jet.ads.logging.Logger,
 ) : AdProvider<InterstitialAd, InterstitialShowAdCallbacks> {
     override fun load(

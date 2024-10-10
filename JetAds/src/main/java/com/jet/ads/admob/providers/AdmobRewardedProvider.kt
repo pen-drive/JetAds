@@ -21,7 +21,7 @@ import com.jet.ads.utils.AdProvider
  *
  * By using a factory, we can inject a mock implementation during testing, allowing us to simulate the behavior of RewardedAd without interacting with the Android framework or Google Mobile Ads SDK directly.
  * */
-class AdmobRewardedProvider(
+internal class AdmobRewardedProvider(
     private val rewardedAdFactory: (Context, String, AdRequest, RewardedAdLoadCallback) -> Unit = { context, adUnitId, adRequest, callback ->
         RewardedAd.load(context, adUnitId, adRequest, callback)
     },
