@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity(),
 
         installSplashScreen().setKeepOnScreenCondition { keepSplashScreen }
 
+
         registerAppOpenAdForColdStart(AdMobTestIds.APP_OPEN, onCloseSplashScreen = {
             keepSplashScreen = false
         })

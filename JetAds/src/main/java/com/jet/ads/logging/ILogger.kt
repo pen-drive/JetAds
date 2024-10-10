@@ -5,10 +5,10 @@ import android.content.Context
 
 
 /**
- * Basic logs for consumer of the lib.
+ * Basic logs for consumers of the lib.
  *
  * */
-interface ILogger {
+internal interface ILogger {
 
     fun checkConsumerIsInDebugMode(context: Context)
     fun i(tag: String? = null, message: String)
