@@ -23,7 +23,7 @@ class AdmobBannerProvider<TAd, TCallbacks>(
 
         adView.apply {
             this.adUnitId = adUnitId
-            setAdSize(bannerSizeHandler.getAdSize(context, width))
+//            setAdSize(bannerSizeHandler.getAdSize(context, width))
         }
 
         adView.adListener = object : AdListener() {

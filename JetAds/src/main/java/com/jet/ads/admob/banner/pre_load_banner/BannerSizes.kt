@@ -36,5 +36,5 @@ enum class BannerSizes(val width: Dp, val height: Dp) {
      * Anchored adaptive banner with dynamic width and fixed height
      * Use -1.dp for width or height to indicate adaptive behavior
      */
-    ANCHORED_ADAPTIVE_BANNER(80.dp, (100).dp),
+    ANCHORED_ADAPTIVE_BANNER(80.dp, (-1).dp),
 }

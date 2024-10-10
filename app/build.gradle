@@ -49,6 +49,11 @@ android {
 dependencies {
     implementation project(path: ':JetAds')
 
+
+
+    implementation "androidx.navigation:navigation-compose:2.8.2"
+
+
     
     implementation 'androidx.compose.material:material-icons-core:1.2.1'
 

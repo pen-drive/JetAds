@@ -32,10 +32,13 @@ import com.jet.ads.admob.banner.AdaptiveBanner
 import com.jet.ads.admob.interstitial.LoadInterstitial
 import com.jet.ads.admob.rewarded.LoadRewarded
 import com.jet.ads.admob.AdMobTestIds
+import com.jet.ads.admob.banner.pre_load_banner.Banner
+import com.jet.ads.admob.banner.pre_load_banner.BannerLoader
+import com.jet.ads.admob.banner.pre_load_banner.BannerSizes
 
 
 @Composable
-fun MainScreen(viewModel: MainViewModel) {
+fun MainScreen(viewModel: MainViewModel, goToBannersScreen: () -> Unit = {}) {
 
     val activity = LocalContext.current as Activity
     val scrollableState = rememberScrollState()
@@ -52,8 +55,11 @@ fun MainScreen(viewModel: MainViewModel) {
     LoadInterstitial(AdMobTestIds.INTERSTITIAL)
     LoadRewarded(AdMobTestIds.REWARDED)
 
+    BannerLoader(AdMobTestIds.FIXED_SIZE_BANNER, bannerSizes = BannerSizes.BANNER)
+
     Scaffold(bottomBar = {
-        AdaptiveBanner(AdMobTestIds.ADAPTIVE_BANNER)
+        Banner(adUnit = AdMobTestIds.FIXED_SIZE_BANNER)
+//        AdaptiveBanner(AdMobTestIds.ADAPTIVE_BANNER)
     }) {
         Column(
             modifier = Modifier
@@ -82,7 +88,7 @@ fun MainScreen(viewModel: MainViewModel) {
                             AdMobTestIds.INTERSTITIAL, activity
                         )
                     )
-                }, enabled =  isAdsEnabled) {
+                }, enabled = isAdsEnabled) {
                     Text(stringResource(R.string.mostrar_interstitial))
                 }
 
@@ -105,6 +111,14 @@ fun MainScreen(viewModel: MainViewModel) {
                 Icon(Icons.Default.Info, null)
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(text = stringResource(R.string.test_open_ad_instructions))
+            }
+            Spacer(modifier = Modifier.height(25.dp))
+
+
+            Button(onClick = {
+                goToBannersScreen()
+            }) {
+                Text("Go to Banners screen")
             }
         }
     }

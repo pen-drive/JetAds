@@ -5,34 +5,63 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.jet.ads.common.initializers.AdsInitializer
-import com.jet.ads.common.initializers.AdsInitializeFactory
-import com.jet.ads.common.app_open.AppOpenAdManagerFactory
-import com.jet.ads.admob.AdMobTestIds
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.jet.ads.common.app_open.AppOpenAdManager
+import com.jet.ads.common.app_open.AppOpenAdManagerFactory
+import com.jet.ads.common.initializers.AdsInitializeFactory
+import com.jet.ads.common.initializers.AdsInitializer
 
 
-class MainActivity : AppCompatActivity(),
-    AdsInitializer by AdsInitializeFactory.admobInitializer(),
-    AppOpenAdManager by AppOpenAdManagerFactory.admobAppOpenAdManager()
-{
+const val mainScreen = "mainScreen"
+const val bannersScreen = "bannersScreen"
 
-    private var keepSplashScreen = true
+class MainActivity : AppCompatActivity(), AdsInitializer by AdsInitializeFactory.admobInitializer(),
+    AppOpenAdManager by AppOpenAdManagerFactory.admobAppOpenAdManager() {
+
+
+    private var keepSplashScreen = false // <-- for control de splash screen
+    private lateinit var navHostController: NavHostController
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initializeAds()
+        initializeAds() // <-- initialize the lib
 
         installSplashScreen().setKeepOnScreenCondition { keepSplashScreen }
 
-
-        registerAppOpenAdForColdStart(AdMobTestIds.APP_OPEN, onCloseSplashScreen = {
-            keepSplashScreen = false
-        })
+//        registerAppOpenAdForColdStart(AdMobTestIds.APP_OPEN, onCloseSplashScreen = {
+//            keepSplashScreen = false
+//        })
 
         setContent {
             val viewModel: MainViewModel = viewModel()
-            MainScreen(viewModel = viewModel)
+
+
+
+            navHostController = rememberNavController()
+
+
+            NavHost(
+                navController = navHostController, startDestination = mainScreen
+            ) {
+
+                composable(mainScreen) {
+                    MainScreen(viewModel = viewModel, goToBannersScreen = {
+                        navHostController.navigate(bannersScreen)
+                    })
+                }
+
+
+                composable(bannersScreen) {
+                    BannersScreen(onNavigateUp = {
+                        navHostController.navigateUp()
+                    })
+                }
+
+            }
         }
     }
 }

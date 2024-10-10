@@ -2,11 +2,13 @@ package com.jet.ads.admob.banner.pre_load_banner
 
 import android.app.Activity
 import android.content.Context
+import androidx.work.Logger
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import com.jet.ads.utils.AdNotAvailableException
 import com.jet.ads.utils.AdProvider
 import com.jet.ads.common.controller.ControlProvider
+import com.jet.ads.logging.ILogger
 import com.jet.ads.utils.expiration.AdExpirationHandler
 import com.jet.ads.utils.pools.AdPool
 import com.jet.ads.utils.retry.RetryPolicy
@@ -16,7 +18,8 @@ internal abstract class BaseBannerAdManager<TAd, TCallbacks>(
     private val adPool: AdPool<TAd>,
     private val adProvider: BannerProvider<TAd, TCallbacks>,
     private val adExpirationHandler: AdExpirationHandler,
-    private val retryPolicy: RetryPolicy
+    private val retryPolicy: RetryPolicy,
+    private val logger: ILogger = com.jet.ads.logging.Logger,
 ) {
 
 
@@ -41,6 +44,7 @@ internal abstract class BaseBannerAdManager<TAd, TCallbacks>(
         val appContext = context.applicationContext
 
         adProvider.load(adUnitId, bannerSizes, context, { ad ->
+            logger.adLoaded(adUnitId)
             adPool.saveAd(adUnitId, ad)
             onAdLoaded(ad)
         }, { error ->
