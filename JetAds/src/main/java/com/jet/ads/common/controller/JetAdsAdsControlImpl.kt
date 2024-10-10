@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
  * consider implementing your own `AdsControl` interface. If you do implement your own,
  * be sure to pass it to `initializeAds()` in the `MainActivity`.
  */
-object JetAdsAdsControlImpl : AdsControl {
+object JetAdsAdsControlImpl : JetAdsControl {
 
     private val _isToShowAdds = MutableStateFlow(true)
 
