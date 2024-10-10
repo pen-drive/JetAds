@@ -30,6 +30,8 @@ class MainActivity : AppCompatActivity(),
             keepSplashScreen = false
         })
 
+
+
         setContent {
             val viewModel: MainViewModel = viewModel()
             MainScreen(viewModel = viewModel)
