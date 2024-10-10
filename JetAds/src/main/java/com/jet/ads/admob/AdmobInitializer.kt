@@ -14,20 +14,21 @@ import com.jet.ads.di.JetAdsLib
 import com.jet.ads.common.initializers.AdsInitializer
 import com.jet.ads.common.controller.AdsControl
 import com.jet.ads.common.controller.ControlProvider
+import com.jet.ads.logging.ILogger
+import com.jet.ads.logging.Logger
 import com.jet.ads.utils.pools.AdPool
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
 
 
 internal class AdmobInitializer(
     private val jetAdsLibs: JetAdsLib = JetAds,
+    private val logger: ILogger = Logger,
     private val controlLocator: ControlProvider = ControlProvider,
     private val adMobRewardedPool: AdPool<RewardedAd>,
     private val adMobInterstitialPool: AdPool<InterstitialAd>,
@@ -38,7 +39,6 @@ internal class AdmobInitializer(
     private val _adsInitializationStatus = MutableStateFlow(false)
     private val adsInitializationStatus = _adsInitializationStatus.asStateFlow()
 
-
     private var activityRef: WeakReference<ComponentActivity>? = null
 
     @Deprecated("this method is deprecated")
@@ -46,6 +46,9 @@ internal class AdmobInitializer(
         context: ComponentActivity, backgroundScope: CoroutineScope, adsControl: AdsControl
     ): Flow<Boolean> {
         setupAdsInitialization(context, adsControl)
+
+
+
         return adsInitializationStatus
     }
 
@@ -57,6 +60,8 @@ internal class AdmobInitializer(
 
     private fun setupAdsInitialization(activity: ComponentActivity, adsControl: AdsControl) {
         controlLocator.setAdControl(adsControl)
+
+        logger.checkConsumerIsInDebugMode(activity)
 
         if (!adsControl.areAdsEnabled().value) {
             _adsInitializationStatus.value = true

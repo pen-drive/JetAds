@@ -27,7 +27,7 @@ internal class AppOpenAdAdmobSetupWithExtensionFunc(
     private var closeSplashScreenRef: WeakReference<(() -> Unit)>? = null
     private var isAdRegistered: Boolean = false
 
-    class AdAlreadyRegisteredException : Exception("App Open Ad has already been registered")
+    class AdAlreadyRegisteredException : Exception("App Open Ad has already been registered, please use only one registerAppOpenAd*()")
 
     override fun ComponentActivity.registerAppOpenAd(
         adUnitId: String,

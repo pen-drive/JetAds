@@ -10,6 +10,7 @@ import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.jet.ads.common.callbacks.FullRewardedShowAdCallbacks
 import com.jet.ads.common.callbacks.RewardedCallBack
+import com.jet.ads.logging.ILogger
 import com.jet.ads.utils.AdProvider
 
 /**
@@ -23,7 +24,8 @@ import com.jet.ads.utils.AdProvider
 class AdmobRewardedProvider(
     private val rewardedAdFactory: (Context, String, AdRequest, RewardedAdLoadCallback) -> Unit = { context, adUnitId, adRequest, callback ->
         RewardedAd.load(context, adUnitId, adRequest, callback)
-    }
+    },
+    private val logger: ILogger = com.jet.ads.logging.Logger,
 ) : AdProvider<RewardedAd, RewardedCallBack> {
     override fun load(
         adUnitId: String,
@@ -37,10 +39,12 @@ class AdmobRewardedProvider(
             object : RewardedAdLoadCallback() {
                 override fun onAdLoaded(ad: RewardedAd) {
                     onAdLoaded(ad)
+                    logger.adLoaded(adUnitId)
                 }
 
                 override fun onAdFailedToLoad(error: LoadAdError) {
                     onAdFailedToLoad(error)
+                    logger.adFailedToLoad(adUnitId, error.message)
                 }
             })
     }
@@ -59,37 +63,44 @@ class AdmobRewardedProvider(
             reward?.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdClicked() {
                     callbacks.onAdClicked()
+                    logger.adClicked(adUnitId)
                 }
 
                 override fun onAdDismissedFullScreenContent() {
                     onDismiss()
                     callbacks.onAdDismissed()
+                    logger.adClosed(adUnitId)
                 }
 
                 override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                     callbacks.onAdFailedToShow(adError)
+                    logger.adFailedToShow(adUnitId, adError.message)
                 }
 
                 override fun onAdImpression() {
                     callbacks.onAdImpression()
+                    logger.adImpressionRecorded(adUnitId)
 
                 }
 
                 override fun onAdShowedFullScreenContent() {
                     callbacks.onAdShowed()
+                    logger.adDisplayed(adUnitId)
 
                 }
             }
-        }else{
+        } else {
             reward?.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdDismissedFullScreenContent() {
                     onDismiss()
+                    logger.adClosed(adUnitId)
                 }
             }
         }
 
         reward?.show(activity) { rewardItem ->
             callbacks?.onRewarded(rewardItem)
+            logger.adRewarded(adUnitId, rewardItem.type, rewardItem.amount)
         }
 
     }

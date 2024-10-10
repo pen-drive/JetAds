@@ -8,10 +8,13 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.jet.ads.common.callbacks.OpenAppShowAdCallbacks
+import com.jet.ads.logging.ILogger
 import com.jet.ads.utils.AdProvider
 
 
-class AdmobOpenAppProvider : AdProvider<AppOpenAd, OpenAppShowAdCallbacks> {
+class AdmobOpenAppProvider(
+    private val logger: ILogger = com.jet.ads.logging.Logger,
+) : AdProvider<AppOpenAd, OpenAppShowAdCallbacks> {
     override fun load(
         adUnitId: String,
         context: Context,
@@ -24,10 +27,12 @@ class AdmobOpenAppProvider : AdProvider<AppOpenAd, OpenAppShowAdCallbacks> {
             object : AppOpenAd.AppOpenAdLoadCallback() {
                 override fun onAdLoaded(ad: AppOpenAd) {
                     onAdLoaded(ad)
+                    logger.adLoaded(adUnitId)
                 }
 
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                     onAdFailedToLoad(loadAdError)
+                    logger.adFailedToLoad(adUnitId, loadAdError.message)
                 }
             })
 
@@ -48,26 +53,31 @@ class AdmobOpenAppProvider : AdProvider<AppOpenAd, OpenAppShowAdCallbacks> {
             openAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdClicked() {
                     callbacks.onAdClicked()
+                    logger.adClicked(adUnitId)
                 }
 
                 override fun onAdDismissedFullScreenContent() {
 
                     onDismiss()
                     callbacks.onAdDismissed()
+                    logger.adClosed(adUnitId)
+
                 }
 
                 override fun onAdFailedToShowFullScreenContent(adError: AdError) {
 
                     callbacks.onAdFailedToShow(adError)
+                    logger.adFailedToShow(adUnitId, adError.message)
                 }
 
                 override fun onAdImpression() {
-
+                    logger.adImpressionRecorded(adUnitId)
                     callbacks.onAdImpression()
                 }
 
                 override fun onAdShowedFullScreenContent() {
                     callbacks.onAdShowed()
+                    logger.adDisplayed(adUnitId)
                 }
             }
         }

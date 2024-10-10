@@ -10,8 +10,11 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.jet.ads.utils.AdProvider
 import com.jet.ads.common.callbacks.InterstitialShowAdCallbacks
+import com.jet.ads.logging.ILogger
 
-class AdmobInterstitialProvider : AdProvider<InterstitialAd, InterstitialShowAdCallbacks> {
+class AdmobInterstitialProvider(
+    private val logger: ILogger = com.jet.ads.logging.Logger,
+) : AdProvider<InterstitialAd, InterstitialShowAdCallbacks> {
     override fun load(
         adUnitId: String,
         context: Context,
@@ -19,17 +22,18 @@ class AdmobInterstitialProvider : AdProvider<InterstitialAd, InterstitialShowAdC
         onAdFailedToLoad: (LoadAdError) -> Unit
     ) {
 
-        InterstitialAd.load(
-            context,
+        InterstitialAd.load(context,
             adUnitId,
             AdRequest.Builder().build(),
             object : InterstitialAdLoadCallback() {
                 override fun onAdLoaded(ad: InterstitialAd) {
                     onAdLoaded(ad)
+                    logger.adLoaded(adUnitId)
                 }
 
                 override fun onAdFailedToLoad(error: LoadAdError) {
                     onAdFailedToLoad(error)
+                    logger.adFailedToLoad(adUnitId, error.message)
                 }
             })
     }
@@ -49,29 +53,31 @@ class AdmobInterstitialProvider : AdProvider<InterstitialAd, InterstitialShowAdC
             override fun onAdClicked() {
                 super.onAdClicked()
                 callbacks?.onAdClicked()
+                logger.adClicked(adUnitId)
             }
 
             override fun onAdShowedFullScreenContent() {
                 super.onAdShowedFullScreenContent()
-
                 callbacks?.onAdShowed()
+                logger.adDisplayed(adUnitId)
             }
 
             override fun onAdFailedToShowFullScreenContent(p0: AdError) {
                 super.onAdFailedToShowFullScreenContent(p0)
-
-
                 callbacks?.onAdFailedToShow(p0)
+                logger.adFailedToShow(adUnitId, p0.message)
             }
 
             override fun onAdImpression() {
                 super.onAdImpression()
                 callbacks?.onAdImpression()
+                logger.adImpressionRecorded(adUnitId)
             }
 
             override fun onAdDismissedFullScreenContent() {
                 onDismiss()
                 callbacks?.onAdDismissed()
+                logger.adClosed(adUnitId)
             }
 
         }
