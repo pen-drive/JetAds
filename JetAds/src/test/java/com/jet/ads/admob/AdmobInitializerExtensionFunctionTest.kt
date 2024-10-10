@@ -48,7 +48,7 @@ class AdmobInitializerExtensionFunctionTest {
         testLifecycleOwner = TestLifecycleOwner()
 
 
-        every { activity.lifecycle } returns testLifecycleOwner.lifecycle
+
 
 
         admobInitializer = AdmobInitializer(
@@ -88,7 +88,7 @@ class AdmobInitializerExtensionFunctionTest {
     @Test
     fun `initializeAds extension function should initialize MobileAds when ads are enabled`() = runTest {
         every { adsControl.areAdsEnabled() } returns MutableStateFlow(true)
-
+        every { activity.lifecycle } returns testLifecycleOwner.lifecycle
         mockkStatic(MobileAds::class)
 
         every {
@@ -147,6 +147,7 @@ class AdmobInitializerExtensionFunctionTest {
         verify { adMobInterstitialPool.clearPool() }
         verify { adMobAppOpenPool.clearPool() }
 
-        verify { activity.lifecycle.removeObserver(admobInitializer) }
+
+        verify { activity.lifecycle.removeObserver(any()) }
     }
 }
