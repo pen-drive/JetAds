@@ -28,12 +28,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.consumer.R
 import com.example.consumer.presentation.components.Greeting
 import com.example.consumer.presentation.components.SwitchAds
-import com.jet.ads.admob.banner.AdaptiveBanner
 import com.jet.ads.admob.interstitial.LoadInterstitial
 import com.jet.ads.admob.rewarded.LoadRewarded
 import com.jet.ads.admob.AdMobTestIds
 import com.jet.ads.admob.banner.pre_load_banner.Banner
-import com.jet.ads.admob.banner.pre_load_banner.BannerLoader
+import com.jet.ads.admob.banner.pre_load_banner.LoadBanner
 import com.jet.ads.admob.banner.pre_load_banner.BannerSizes
 
 
@@ -55,7 +54,7 @@ fun MainScreen(viewModel: MainViewModel, goToBannersScreen: () -> Unit = {}) {
     LoadInterstitial(AdMobTestIds.INTERSTITIAL)
     LoadRewarded(AdMobTestIds.REWARDED)
 
-    BannerLoader(AdMobTestIds.FIXED_SIZE_BANNER, bannerSizes = BannerSizes.BANNER)
+    LoadBanner(AdMobTestIds.FIXED_SIZE_BANNER, bannerSizes = BannerSizes.BANNER)
 
     Scaffold(bottomBar = {
         Banner(adUnit = AdMobTestIds.FIXED_SIZE_BANNER)

@@ -9,6 +9,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.jet.ads.admob.AdMobTestIds
+import com.jet.ads.admob.banner.pre_load_banner.LoadBanner
+import com.jet.ads.admob.banner.pre_load_banner.BannerSizes
 import com.jet.ads.common.app_open.AppOpenAdManager
 import com.jet.ads.common.app_open.AppOpenAdManagerFactory
 import com.jet.ads.common.initializers.AdsInitializeFactory
@@ -39,6 +42,8 @@ class MainActivity : AppCompatActivity(), AdsInitializer by AdsInitializeFactory
         setContent {
             val viewModel: MainViewModel = viewModel()
 
+            LoadBanner(AdMobTestIds.FIXED_SIZE_BANNER, bannerSizes = BannerSizes.LARGE_BANNER)
+            LoadBanner(AdMobTestIds.FIXED_SIZE_BANNER, bannerSizes = BannerSizes.MEDIUM_RECTANGLE)
 
 
             navHostController = rememberNavController()

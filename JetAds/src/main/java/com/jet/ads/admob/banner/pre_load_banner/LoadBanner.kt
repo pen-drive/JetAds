@@ -29,17 +29,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.ads.AdView
-import com.jet.ads.admob.banner.BannerPreview
 import com.jet.ads.admob.banner.BannersPreview
-import com.jet.ads.admob.banner.loadAdaptiveBannerAd2
-import com.jet.ads.common.callbacks.BannerCallBack
 import com.jet.ads.common.callbacks.BannersCallBack
 import com.jet.ads.common.controller.ControlProvider
 import com.jet.ads.utils.BannerManagerFactory
 
 
 @Composable
-fun BannerLoader(adId: String, modifier: Modifier = Modifier, bannerSizes: BannerSizes) {
+fun LoadBanner(adId: String, bannerSizes: BannerSizes , modifier: Modifier = Modifier, ) {
     val context = LocalContext.current as Activity
     val currentWidth = LocalConfiguration.current.screenWidthDp
 
@@ -54,8 +51,8 @@ fun BannerLoader(adId: String, modifier: Modifier = Modifier, bannerSizes: Banne
 
 @Composable
 fun Banner(
-    modifier: Modifier = Modifier,
     adUnit: String,
+    modifier: Modifier = Modifier,
     bannerSizes: BannerSizes = BannerSizes.ANCHORED_ADAPTIVE_BANNER,
     safeTopMarginDp: Dp = 12.dp,
     safeAreaColor: Color = Color.Transparent,

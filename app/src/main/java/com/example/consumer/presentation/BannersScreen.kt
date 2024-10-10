@@ -22,6 +22,7 @@ fun BannersScreen(modifier: Modifier = Modifier, onNavigateUp: () -> Unit = {}) 
 
         Column(Modifier.padding(it)) {
             Banner(adUnit = AdMobTestIds.FIXED_SIZE_BANNER)
+            Banner(adUnit = AdMobTestIds.FIXED_SIZE_BANNER)
 
 
         }
